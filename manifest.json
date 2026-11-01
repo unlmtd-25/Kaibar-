@@ -2,7 +2,7 @@
   "name": "Kaibar Books",
   "short_name": "Kaibar",
   "description": "Sales, recipe costing, cake and catering orders, and books for a kaibar.",
-  "id": "/",
+  "id": "/kaibar-/",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
