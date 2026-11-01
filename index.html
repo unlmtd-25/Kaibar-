@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A3438">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kaibar">
+<title>Kaibar Books</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+/* Layout: deep-lagoon top bar and nav around a pale sea-glass canvas. White work surfaces, mango for every primary action, tabular figures for money. Bottom tab bar on phones, side rail from 900px. */
+:root {
+  --bg: #EDF3F1; --surface: #FFFFFF; --sunk: #E3EDEA; --ink: #10292B; --ink2: #4D6668; --line: #D0DEDB;
+  --deep: #0A3438; --deep-ink: #E3F3F0; --deep-dim: #8DB8B4; --deep-line: #1D5156;
+  --accent: #F4A611; --accent-hi: #FFB92E; --accent-ink: #2B1C00;
+  --good: #0F7A58; --good-bg: #D9F2E7; --bad: #B3302A; --bad-bg: #FBE3E0; --warn: #7D5200; --warn-bg: #FFEDC2; --info: #1E5E9C; --info-bg: #DEECFA;
+  --bar: #1B7C7A; --bar2: #E0900A; --shadow: 0 1px 2px rgba(10,52,56,.06), 0 8px 24px rgba(10,52,56,.06);
+  --f-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif; --f-body: 'Figtree', 'Segoe UI', system-ui, sans-serif; --f-mono: 'Spline Sans Mono', ui-monospace, Menlo, Consolas, monospace;
+  --r: 14px; --gut: max(16px, env(safe-area-inset-left, 0px)); --gutr: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #08181A; --surface: #112628; --sunk: #0C1F21; --ink: #E4F0EE; --ink2: #93ADAB; --line: #23403F;
+  --deep: #061214; --deep-ink: #DCEEEB; --deep-dim: #7FA6A2; --deep-line: #173B3E;
+  --accent: #F5AE1F; --accent-hi: #FFC247; --accent-ink: #2B1C00;
+  --good: #55D3A8; --good-bg: #123A2F; --bad: #FF9186; --bad-bg: #40201D; --warn: #F6C86B; --warn-bg: #3B2E0F; --info: #86BAF2; --info-bg: #13293F;
+  --bar: #3DB8B0; --bar2: #F5AE1F; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #08181A; --surface: #112628; --sunk: #0C1F21; --ink: #E4F0EE; --ink2: #93ADAB; --line: #23403F;
+  --deep: #061214; --deep-ink: #DCEEEB; --deep-dim: #7FA6A2; --deep-line: #173B3E;
+  --accent: #F5AE1F; --accent-hi: #FFC247; --accent-ink: #2B1C00;
+  --good: #55D3A8; --good-bg: #123A2F; --bad: #FF9186; --bad-bg: #40201D; --warn: #F6C86B; --warn-bg: #3B2E0F; --info: #86BAF2; --info-bg: #13293F;
+  --bar: #3DB8B0; --bar2: #F5AE1F; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); color-scheme: dark;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+html, body { font-family: var(--f-body); }
+body { background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.45; margin: 0; -webkit-text-size-adjust: 100%; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--deep); }
+body.noscroll { overflow: hidden; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: 28px; font-weight: 700; line-height: 1.1; } h2 { font-size: 17px; font-weight: 650; } h3 { font-size: 16px; font-weight: 650; }
+p { margin: 0; } small { font-size: 12.5px; color: var(--ink2); } b { font-weight: 650; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.ic { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.muted { color: var(--ink2); } .neg { color: var(--bad); } .pos { color: var(--good); } .warnt { color: var(--warn); }
+body.locked .owner-only { display: none !important; }
+
+/* top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--deep); color: var(--deep-ink); }
+.topbar-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px var(--gutr) 10px var(--gut); max-width: 1240px; margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand > div { display: flex; flex-direction: column; min-width: 0; }
+.brand b { font-family: var(--f-display); font-size: 18px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand small { color: var(--deep-dim); }
+.mark { width: 38px; height: 38px; border-radius: 11px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; flex: none; }
+.mark svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.top-actions { display: flex; gap: 4px; }
+.icon-btn { background: transparent; border: 0; width: 40px; height: 40px; border-radius: 10px; display: inline-grid; place-items: center; cursor: pointer; color: inherit; }
+.icon-btn:hover { background: var(--sunk); } .icon-btn.lite:hover { background: var(--deep-line); }
+
+/* shell + nav */
+.shell { max-width: 1240px; margin: 0 auto; padding: 18px var(--gutr) 120px var(--gut); }
+.nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; display: flex; background: var(--deep); padding: 6px var(--gutr) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gut); gap: 2px; }
+.nav-btn { flex: 1; min-width: 0; position: relative; background: none; border: 0; color: var(--deep-dim); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 2px; border-radius: 10px; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+.nav-btn[aria-current="true"] { background: var(--deep-line); color: var(--accent-hi); }
+.dot { position: absolute; top: 3px; left: calc(50% + 6px); background: var(--accent); color: var(--accent-ink); font-style: normal; font-size: 10.5px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
+@media (min-width: 900px) {
+  .shell { display: grid; grid-template-columns: 188px minmax(0, 1fr); gap: 28px; padding-bottom: 48px; align-items: start; }
+  .nav { position: sticky; top: calc(76px + env(safe-area-inset-top, 0px)); flex-direction: column; background: transparent; padding: 0; gap: 4px; }
+  .nav-btn { flex-direction: row; gap: 12px; padding: 11px 14px; font-size: 15px; color: var(--ink2); }
+  .nav-btn[aria-current="true"] { background: var(--deep); color: var(--accent-hi); }
+  .dot { position: static; margin-left: auto; }
+}
+main { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+
+/* page parts */
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; min-width: 0; }
+.card.inset { background: var(--sunk); border-color: transparent; padding: 14px; }
+.card.narrow { max-width: 420px; margin: 24px auto; display: flex; flex-direction: column; gap: 12px; }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.card-h.sp { margin-top: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.grid2.top { align-items: start; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tiles.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 820px) { .tiles, .tiles.three { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tl { font-size: 12.5px; color: var(--ink2); font-weight: 600; }
+.big { font-family: var(--f-display); font-size: 25px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.ts { font-size: 12.5px; color: var(--ink2); }
+.quick { display: flex; flex-wrap: wrap; gap: 10px; }
+.para { line-height: 1.5; } .para.note { background: var(--sunk); padding: 10px 12px; border-radius: 10px; margin: 8px 0; }
+.empty { text-align: center; padding: 26px 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--ink2); }
+.empty b { color: var(--ink); font-family: var(--f-display); font-size: 17px; } .empty p { max-width: 42ch; }
+.demo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--info-bg); color: var(--info); border-radius: var(--r); padding: 12px 14px; }
+.demo.bad { background: var(--bad-bg); color: var(--bad); }
+
+/* buttons, chips */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 650; cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--ink2); } .btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); } .btn.primary:hover { background: var(--accent-hi); border-color: var(--accent-hi); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--ink2); } .btn.ghost:hover { background: var(--sunk); color: var(--ink); }
+.btn.danger { background: var(--bad); border-color: var(--bad); color: #fff; } .danger-t { color: var(--bad) !important; }
+.btn.sm { min-height: 36px; padding: 0 12px; font-size: 14px; border-radius: 10px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.chip { display: inline-flex; align-items: center; background: var(--sunk); color: var(--ink2); font-size: 12px; font-weight: 650; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.chip.good { background: var(--good-bg); color: var(--good); } .chip.warn { background: var(--warn-bg); color: var(--warn); } .chip.bad { background: var(--bad-bg); color: var(--bad); } .chip.info { background: var(--info-bg); color: var(--info); }
+
+/* tabs */
+.tabs { display: flex; gap: 6px; }
+.tabs.scroll { overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .tabs.scroll::-webkit-scrollbar { display: none; }
+.tab { flex: none; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink2); padding: 7px 14px; border-radius: 99px; font-weight: 650; cursor: pointer; min-height: 38px; }
+.tab[aria-pressed="true"] { background: var(--deep); border-color: var(--deep); color: var(--deep-ink); }
+
+/* alerts */
+.alert { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; background: var(--sunk); flex-wrap: wrap; }
+.alert > span { flex: 1; min-width: 180px; } .alert .btn { margin-left: auto; }
+.alert.warn { background: var(--warn-bg); color: var(--warn); } .alert.bad { background: var(--bad-bg); color: var(--bad); } .alert.info { background: var(--info-bg); color: var(--info); }
+.alert .btn { background: var(--surface); color: var(--ink); }
+
+/* chart */
+.chart { width: 100%; height: auto; display: block; }
+.chart .grid { stroke: var(--line); stroke-width: 1; } .chart .ax { fill: var(--ink2); font: 12px var(--f-body); }
+.chart .bar { fill: var(--bar); } .chart .gpline { fill: none; stroke: var(--bar2); stroke-width: 2.5; stroke-linejoin: round; } .chart .gpdot { fill: var(--bar2); stroke: var(--surface); stroke-width: 2; }
+.legend { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink2); }
+.legend .k { width: 10px; height: 10px; border-radius: 3px; display: inline-block; } .legend .k.bar { background: var(--bar); } .legend .k.gp { background: var(--bar2); margin-left: 8px; }
+
+/* order rows */
+.orow { display: flex; align-items: center; gap: 12px; width: 100%; background: none; border: 0; border-top: 1px solid var(--line); padding: 10px 0; text-align: left; cursor: pointer; }
+.orow:first-of-type { border-top: 0; }
+.od { width: 46px; height: 50px; border-radius: 10px; background: var(--sunk); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none; line-height: 1.05; }
+.od b { font-family: var(--f-display); font-size: 19px; } .od small { text-transform: uppercase; font-size: 10.5px; letter-spacing: .05em; } .od.hot { background: var(--accent); color: var(--accent-ink); } .od.hot small { color: var(--accent-ink); }
+.ob { display: flex; flex-direction: column; min-width: 0; flex: 1; } .ob b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ob small { overflow: hidden; text-overflow: ellipsis; }
+.or { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex: none; }
+
+/* sell */
+.sell { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+.sell-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cartside { display: none; position: sticky; top: calc(76px + env(safe-area-inset-top, 0px)); }
+@media (min-width: 900px) { .sell { grid-template-columns: minmax(0, 1fr) 340px; } .cartside { display: block; } .cartbar { display: none !important; } }
+.search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 0 12px; min-height: 44px; color: var(--ink2); }
+.search input:not([type=radio]):not([type=checkbox]) { border: 0; background: transparent; outline: 0; flex: 1; min-width: 0; color: var(--ink); height: 42px; min-height: 0; padding: 0; border-radius: 0; }
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.pcard { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; padding: 12px; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--r); cursor: pointer; min-height: 118px; }
+.pcard:hover { border-color: var(--bar); } .pcard:active { transform: scale(.98); }
+.pn { font-weight: 650; line-height: 1.2; } .pp { font-family: var(--f-display); font-size: 21px; font-weight: 700; margin-top: auto; font-variant-numeric: tabular-nums; } .pu { font-size: 12px; color: var(--ink2); margin-top: -3px; }
+.clines { display: flex; flex-direction: column; } .cline { display: grid; grid-template-columns: 1fr auto 74px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); } .cline:first-child { border-top: 0; }
+.cname { display: flex; flex-direction: column; font-weight: 600; min-width: 0; } .cname small { font-weight: 400; }
+.step { display: flex; align-items: center; gap: 4px; } .step button { width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); display: grid; place-items: center; cursor: pointer; } .step b { min-width: 22px; text-align: center; font-variant-numeric: tabular-nums; }
+.num { font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.ctotals { border-top: 2px solid var(--ink); margin-top: 8px; padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.disc { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; color: var(--ink2); } .disc input { width: 110px; text-align: right; padding: 7px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); }
+.trow { display: flex; justify-content: space-between; align-items: baseline; } .trow.big { font-family: var(--f-display); font-size: 22px; font-weight: 700; } .trow.big b { font-variant-numeric: tabular-nums; }
+.paybtns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.cartbar { position: fixed; z-index: 34; left: var(--gut); right: var(--gutr); bottom: calc(72px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 12px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 14px; padding: 0 16px; min-height: 54px; font-weight: 650; box-shadow: 0 8px 24px rgba(0,0,0,.25); cursor: pointer; }
+.cartbar b { margin-left: auto; font-family: var(--f-display); font-size: 19px; } .cartbar .go { display: inline-flex; align-items: center; gap: 2px; }
+
+/* forms */
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } @media (max-width: 480px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.fld { display: flex; flex-direction: column; gap: 5px; min-width: 0; } .lbl { font-size: 13px; font-weight: 650; color: var(--ink2); }
+input:not([type=radio]):not([type=checkbox]), select, textarea { width: 100%; min-height: 44px; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--ink); }
+textarea { resize: vertical; } textarea.mono { font-family: var(--f-mono); font-size: 12.5px; }
+input:focus, select:focus, textarea:focus { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); border-color: var(--accent); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; } .opt { position: relative; flex: 1 1 auto; } .opt input { position: absolute; opacity: 0; inset: 0; }
+.opt span { display: flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 11px; font-weight: 650; background: var(--surface); text-align: center; }
+.opt input:checked + span { background: var(--deep); border-color: var(--deep); color: var(--deep-ink); } .opt input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.chk { display: flex; align-items: center; gap: 10px; } .chk input { width: 20px; height: 20px; accent-color: var(--accent); }
+.inl { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .inl > input { flex: 1; min-width: 90px; }
+.foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; } .foot.start { justify-content: flex-start; } .foot.wrap { flex-wrap: wrap; }
+.rows { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; } .rows-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.rrow { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, .8fr) minmax(0, .9fr) 40px; gap: 6px; align-items: center; }
+.lrow { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.4fr) 70px 96px 40px; gap: 6px; align-items: center; }
+.lrow [name=ld][hidden] { display: none; } .lrow:has([name=ld][hidden]) { grid-template-columns: minmax(0, 2.7fr) 70px 96px 40px; }
+.jrow { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, .8fr) minmax(0, .8fr) minmax(0, 1fr) 40px; gap: 6px; align-items: center; }
+@media (max-width: 560px) {
+  .lrow, .lrow:has([name=ld][hidden]) { grid-template-columns: 1fr 1fr 40px; } .lrow select, .lrow [name=ld] { grid-column: 1 / 3; } .lrow [name=lq] { grid-column: 1; } .lrow [name=lpr] { grid-column: 2; }
+  .jrow { grid-template-columns: 1fr 1fr 40px; } .jrow select, .jrow [name=jp] { grid-column: 1 / 3; }
+  .lrow, .jrow { padding-bottom: 10px; border-bottom: 1px dashed var(--line); }
+}
+.prev { min-width: 0; } .prev:empty { display: none; }
+.sum { display: flex; flex-direction: column; gap: 6px; background: var(--sunk); border-radius: 12px; padding: 12px 14px; margin-top: 8px; } .sum > div { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; } .sum span { color: var(--ink2); } .sum b { font-variant-numeric: tabular-nums; }
+.paytotal { display: flex; justify-content: space-between; align-items: baseline; background: var(--sunk); border-radius: 12px; padding: 14px; gap: 10px; } .paytotal b { font-family: var(--f-display); font-size: 28px; }
+.change { min-height: 22px; font-size: 15px; }
+.quickb { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; color: var(--ink2); font-size: 13px; }
+.pbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .pbar select { width: auto; min-width: 160px; } .pbar input { width: auto; }
+
+/* tables */
+.tscroll { overflow-x: auto; max-width: 100%; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; } .tbl th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink2); font-weight: 650; padding: 8px 10px; border-bottom: 1.5px solid var(--line); white-space: nowrap; }
+.tbl td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; } .tbl .r { text-align: right; } .tbl tr:last-child td { border-bottom: 0; }
+.tbl.mini td, .tbl.mini th { padding: 7px 8px; font-size: 13.5px; } .tbl tr.short td { color: var(--warn); font-weight: 600; } .tbl tr.off { opacity: .55; }
+.tbl tr.click { cursor: pointer; } .tbl tr.click:hover td { background: var(--sunk); } .tbl .code { font-family: var(--f-mono); color: var(--ink2); width: 64px; }
+.tbl.stmt td { font-size: 15px; } .tbl.stmt .sec td { font-family: var(--f-display); font-weight: 650; padding-top: 18px; border-bottom: 1.5px solid var(--ink); } .tbl.stmt tr.tot td { font-weight: 700; border-top: 1.5px solid var(--ink2); } .tbl.stmt tr.grand td { font-family: var(--f-display); font-size: 17px; background: var(--sunk); }
+.checks { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* lists */
+.hrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); } .hrow:first-of-type { border-top: 0; } .hrow > div { display: flex; flex-direction: column; min-width: 0; }
+.wrow { display: grid; grid-template-columns: minmax(0, 1fr) 90px 130px auto; gap: 8px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); } .wrow .wn { display: flex; flex-direction: column; }
+@media (max-width: 560px) { .wrow { grid-template-columns: 1fr 1fr; } .wrow .wn { grid-column: 1 / 3; } }
+.rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; } .rcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 10px; } .rcard.off { opacity: .6; } .rtop { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; margin: 0; } .kv dt { font-size: 12px; color: var(--ink2); } .kv dd { margin: 0; font-weight: 650; }
+.guide summary { cursor: pointer; font-family: var(--f-display); font-weight: 650; font-size: 16px; } .guide-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; margin-top: 12px; } .guide-body p { color: var(--ink2); margin-top: 3px; } @media (max-width: 700px) { .guide-body { grid-template-columns: 1fr; } }
+.ogrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 12px; }
+.ocard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; } .ocard.cancelled { opacity: .6; }
+.ohead { display: flex; gap: 12px; align-items: center; width: 100%; padding: 14px; background: none; border: 0; text-align: left; cursor: pointer; } .ohead .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; }
+.oact { display: flex; justify-content: flex-end; padding: 0 14px 12px; }
+.steps { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; } .steps li { flex: 1; text-align: center; font-size: 12px; font-weight: 650; padding: 8px 4px; border-radius: 9px; background: var(--sunk); color: var(--ink2); } .steps li.on { background: var(--deep); color: var(--deep-ink); }
+.ostat { margin-bottom: 12px; } .odet { margin-bottom: 10px; } .payin { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.je { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; background: var(--surface); } .je.void { opacity: .55; } .je.void .memo { text-decoration: line-through; } .je.rev { background: var(--sunk); }
+.jh { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; } .jh .memo { flex: 1; min-width: 140px; font-weight: 600; } .jh > span:not(.memo) { color: var(--ink2); font-size: 13px; }
+.jtools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; } .jtools .search { flex: 1; min-width: 200px; }
+.mix { display: grid; grid-template-columns: 110px 1fr 76px; gap: 10px; align-items: center; padding: 6px 0; } .mixbar { height: 10px; background: var(--sunk); border-radius: 99px; overflow: hidden; } .mixbar i { display: block; height: 100%; background: var(--bar); border-radius: 99px; }
+.menu { display: flex; flex-direction: column; } .mrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 4px; background: none; border: 0; border-top: 1px solid var(--line); text-align: left; cursor: pointer; } .mrow:first-child { border-top: 0; } .mrow span { display: flex; flex-direction: column; } .mrow:hover { background: var(--sunk); }
+.receipt { font-family: var(--f-mono); font-size: 13px; background: var(--sunk); border-radius: 12px; padding: 16px; white-space: pre-wrap; overflow-x: auto; margin: 0 0 12px; }
+
+/* modal */
+.overlay { position: fixed; inset: 0; z-index: 60; background: rgba(4, 18, 20, .6); display: flex; align-items: flex-end; justify-content: center; }
+.sheet { background: var(--surface); width: 100%; max-width: 560px; max-height: 92dvh; max-height: 92vh; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; outline: 0; box-shadow: var(--shadow); }
+.sheet.wide { max-width: 760px; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 12px 6px 18px; } .sheet-head h2 { font-size: 19px; }
+.sheet-body { overflow-y: auto; padding: 8px 18px calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 700px) { .overlay { align-items: center; padding: 24px; } .sheet { border-radius: 20px; } }
+#toast { position: fixed; z-index: 80; left: var(--gut); right: var(--gutr); bottom: calc(86px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; pointer-events: none; }
+.toast { background: var(--ink); color: var(--bg); padding: 11px 16px; border-radius: 12px; font-weight: 600; box-shadow: var(--shadow); max-width: 440px; } .toast.bad { background: var(--bad); color: #fff; } .toast.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); }
+@media (min-width: 900px) { #toast { bottom: 28px; } }
+@media (prefers-reduced-motion: no-preference) { .sheet { animation: rise .2s ease-out; } @keyframes rise { from { transform: translateY(14px); opacity: .6; } } }
+</style></head><body>
+<div id="app">
+  <header class="topbar"><div class="topbar-in">
+    <div class="brand"><span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M2 10h2M20 10h2M9 6c0-1.5 1-1.5 1-3M14 6c0-1.5 1-1.5 1-3"/></svg></span><div><b id="bizname">My Kaibar</b><small id="todaytxt"></small></div></div>
+    <div class="top-actions"><button type="button" class="icon-btn lite" id="lockbtn" data-a="lock" aria-label="Lock owner area" hidden><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="icon-btn lite" data-a="go" data-v="settings" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></button></div>
+  </div></header>
+  <div class="shell"><nav id="nav" class="nav" aria-label="Main"></nav><main id="main"></main></div>
+  <div id="modal" class="overlay" hidden></div>
+  <div id="toast" aria-live="polite"></div>
+</div>
+<script>
+'use strict';
+/* ============ helpers ============ */
+const KEY = 'kaibar.books.v1';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const r2 = n => Math.round((+n + Number.EPSILON) * 100) / 100;
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const today = () => ymd(new Date());
+const addDays = (s, n) => { const d = new Date(s + 'T12:00:00'); d.setDate(d.getDate() + n); return ymd(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
+function money(n, d = 2) {
+  n = +n || 0; if (Math.abs(n) < 0.005) n = 0;
+  const s = Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  return (n < 0 ? '−K ' : 'K ') + s;
+}
+const fmtN = (n, d = 2) => (+n || 0).toLocaleString('en-US', { maximumFractionDigits: d });
+const fmtD = s => s ? new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) : '';
+const fmtDL = s => s ? new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+const fmtT = t => { if (!t) return ''; const [h, m] = t.split(':').map(Number); return ((h + 11) % 12 + 1) + ':' + pad(m) + ' ' + (h < 12 ? 'am' : 'pm'); };
+const pct = n => (isFinite(n) ? Math.round(n) : 0) + '%';
+const plural = (u, n) => n === 1 ? u : u + (/s$/.test(u) ? '' : 's');
+function relDay(s) {
+  const d = daysBetween(today(), s);
+  if (d === 0) return 'today'; if (d === 1) return 'tomorrow'; if (d === -1) return 'yesterday';
+  return d > 0 ? 'in ' + d + ' days' : Math.abs(d) + ' days overdue';
+}
+function nicePrice(c) { if (c <= 0) return 0; if (c < 2) return Math.ceil(c * 10 - 1e-9) / 10; if (c < 20) return Math.ceil(c * 2 - 1e-9) / 2; return Math.ceil(c - 1e-9); }
+
+/* ============ chart of accounts ============ */
+const ACCTS = [
+  ['1000', 'Cash on hand', 'A'], ['1010', 'Mobile money', 'A'], ['1100', 'Customers owe me', 'A'],
+  ['1200', 'Ingredient stock', 'A'], ['1210', 'Food ready to sell', 'A'], ['1300', 'Equipment & fittings', 'A'],
+  ['2000', 'I owe suppliers', 'L'], ['2100', 'Customer deposits', 'L'],
+  ['3000', 'Owner capital', 'Q'], ['3100', 'Owner drawings', 'Q'],
+  ['4000', 'Counter sales', 'R'], ['4100', 'Cake order sales', 'R'], ['4200', 'Catering sales', 'R'],
+  ['4800', 'Forfeited deposits', 'R'], ['4900', 'Discounts given', 'R'],
+  ['5000', 'Cost of food sold', 'X'], ['5100', 'Waste & staff meals', 'X'],
+  ['6000', 'Wages', 'X'], ['6100', 'Rent', 'X'], ['6200', 'Gas, firewood & power', 'X'], ['6300', 'Packaging & cleaning', 'X'],
+  ['6400', 'Transport', 'X'], ['6500', 'Phone & airtime', 'X'], ['6600', 'Repairs', 'X'], ['6900', 'Other expenses', 'X'], ['6950', 'Cash over / short', 'X']
+];
+const TYPE_NAME = { A: 'Assets', L: 'Liabilities', Q: 'Owner equity', R: 'Income', X: 'Expenses' };
+const EXP_CHOICES = ['6000', '6100', '6200', '6300', '6400', '6500', '6600', '6900', '1300'];
+const acctName = a => (ACCTS.find(x => x[0] === a) || [0, a])[1];
+const acctType = a => (ACCTS.find(x => x[0] === a) || [0, 0, 'X'])[2];
+
+/* ============ state ============ */
+let S = null;
+let storageOK = true;
+const blank = () => ({ v: 1, biz: 'My Kaibar', pin: '', demo: false, target: 40, ings: [], prods: [], entries: [], orders: [], closes: [], seq: 0, onum: 0 });
+function load() { try { const t = localStorage.getItem(KEY); if (t) return JSON.parse(t); } catch (e) { storageOK = false; } return null; }
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)); storageOK = true; } catch (e) { storageOK = false; } }
+const ing = id => S.ings.find(i => i.id === id);
+const prod = id => S.prods.find(p => p.id === id);
+const ord = id => S.orders.find(o => o.id === id);
+
+/* ============ units ============ */
+const FAM = { w: { base: 'g', units: ['kg', 'g'], label: 'Weight (kg, g)' }, v: { base: 'ml', units: ['L', 'ml', 'cup', 'tbsp', 'tsp'], label: 'Liquid (L, ml)' }, c: { base: 'pc', units: ['pc', 'dozen'], label: 'Count (pieces)' } };
+const UM = { kg: 1000, g: 1, L: 1000, ml: 1, cup: 250, tbsp: 15, tsp: 5, pc: 1, dozen: 12 };
+const unitsFor = i => { const u = [...FAM[i.fam].units]; if (i.custom && i.custom.name) u.push(i.custom.name); return u; };
+const unitMult = (i, u) => (i.custom && u === i.custom.name) ? i.custom.base : (UM[u] || 1);
+const toBase = (i, q, u) => q * unitMult(i, u);
+const fromBase = (i, b, u) => b / unitMult(i, u);
+const ucost = i => (i.qty > 1e-9 && i.value > 0) ? i.value / i.qty : (i.lastCost || 0);
+const unitOpts = (i, sel) => unitsFor(i).map(u => `<option ${u === sel ? 'selected' : ''}>${esc(u)}</option>`).join('');
+const stockLabel = i => fmtN(fromBase(i, i.qty, i.unit)) + ' ' + i.unit;
+
+/* ============ recipe costing ============ */
+function recipeCalc(p, units) {
+  const f = units / (p.yield || 1); const lines = []; let ingCost = 0;
+  for (const l of (p.recipe || [])) {
+    const i = ing(l.ing); if (!i) continue;
+    const q = toBase(i, l.q, l.u) * f; const c = r2(q * ucost(i));
+    lines.push({ id: i.id, name: i.name, q, c, short: i.qty < q - 1e-9, i, disp: fromBase(i, q, l.u), u: l.u });
+    ingCost += c;
+  }
+  ingCost = r2(ingCost); const over = r2((p.over || 0) * f);
+  return { lines, ingCost, over, total: r2(ingCost + over), per: units ? (ingCost + over) / units : 0, f };
+}
+const recipeUnitCost = p => p.kind === 'resell' ? (p.lastCost || 0) : recipeCalc(p, p.yield || 1).per;
+const ucostP = p => (p.pqty > 1e-9 && p.pvalue > 0) ? p.pvalue / p.pqty : (p.lastCost || recipeUnitCost(p));
+const marginOf = (price, cost) => price > 0 ? (price - cost) / price * 100 : 0;
+
+/* ============ ledger ============ */
+function post({ date, memo, type, lines, ev, ref }) {
+  lines = lines.filter(l => (l.dr || 0) || (l.cr || 0)).map(l => ({ a: l.a, dr: r2(l.dr || 0), cr: r2(l.cr || 0), party: l.party || '' }));
+  const dr = r2(lines.reduce((s, l) => s + l.dr, 0)), cr = r2(lines.reduce((s, l) => s + l.cr, 0));
+  if (Math.abs(dr - cr) > 0.004) throw new Error('Entry does not balance: ' + memo + ' ' + dr + ' vs ' + cr);
+  const e = { id: uid(), n: ++S.seq, date: date || today(), ts: Date.now(), memo, type, lines, ev: ev || null, ref: ref || null };
+  S.entries.push(e); return e;
+}
+function netByAcct(from = '0000-00-00', to = '9999-99-99') {
+  const m = {};
+  for (const e of S.entries) { if (e.date < from || e.date > to) continue; for (const l of e.lines) m[l.a] = r2((m[l.a] || 0) + l.dr - l.cr); }
+  return m;
+}
+const nat = (a, net) => (acctType(a) === 'A' || acctType(a) === 'X') ? net : -net;
+const balOf = a => nat(a, netByAcct()[a] || 0);
+function partyBalances(a) {
+  const m = {};
+  for (const e of S.entries) for (const l of e.lines) if (l.a === a && l.party) m[l.party] = r2((m[l.party] || 0) + (a === '1100' ? l.dr - l.cr : l.cr - l.dr));
+  return Object.entries(m).filter(([, v]) => Math.abs(v) > 0.004).map(([party, amt]) => ({ party, amt })).sort((x, y) => y.amt - x.amt);
+}
+const payAcct = m => m === 'cash' ? '1000' : m === 'mobile' ? '1010' : '2000';
+const rcvAcct = m => m === 'cash' ? '1000' : m === 'mobile' ? '1010' : '1100';
+
+/* ============ engine: stock ============ */
+function buyIng({ id, q, u, cost, method, supplier, date }) {
+  const i = ing(id), base = toBase(i, q, u); cost = r2(cost);
+  i.qty += base; i.value = r2(i.value + cost); i.lastCost = cost / base;
+  return post({ date, memo: `Bought ${fmtN(q)} ${u} ${i.name}` + (supplier ? ' · ' + supplier : ''), type: 'purchase',
+    lines: [{ a: '1200', dr: cost }, { a: payAcct(method), cr: cost, party: method === 'credit' ? supplier : '' }], ev: { kind: 'buy', id, base, cost } });
+}
+function cook({ pid, units, date }) {
+  const p = prod(pid), c = recipeCalc(p, units); const used = [];
+  for (const l of c.lines) { l.i.qty -= l.q; l.i.value = r2(l.i.value - l.c); used.push({ id: l.id, q: l.q, c: l.c }); }
+  p.pqty += units; p.pvalue = r2(p.pvalue + c.total); p.lastCost = c.total / units;
+  return post({ date, memo: `Cooked ${fmtN(units)} ${plural(p.unit, units)} ${p.name}`, type: 'cook',
+    lines: [{ a: '1210', dr: c.total }, { a: '1200', cr: c.ingCost }, { a: '6200', cr: c.over }],
+    ev: { kind: 'cook', pid, units, ing: used, total: c.total, over: c.over, ingCost: c.ingCost } });
+}
+function stockIn({ pid, units, cost, method, supplier, date }) {
+  const p = prod(pid); cost = r2(cost);
+  p.pqty += units; p.pvalue = r2(p.pvalue + cost); p.lastCost = cost / units;
+  return post({ date, memo: `Bought ${fmtN(units)} ${plural(p.unit, units)} ${p.name} to resell` + (supplier ? ' · ' + supplier : ''), type: 'stockin',
+    lines: [{ a: '1210', dr: cost }, { a: payAcct(method), cr: cost, party: method === 'credit' ? supplier : '' }], ev: { kind: 'stockin', pid, units, cost } });
+}
+function writeOff({ t, id, q, reason, date }) { // t: 'p' product units, 'i' ingredient display qty in base
+  let c, name, memo;
+  if (t === 'p') { const p = prod(id); c = r2(ucostP(p) * q); p.pqty -= q; p.pvalue = r2(p.pvalue - c); name = p.name; memo = `${reason}: ${fmtN(q)} ${plural(p.unit, q)} ${name}`; }
+  else { const i = ing(id); c = r2(ucost(i) * q); i.qty -= q; i.value = r2(i.value - c); name = i.name; memo = `${reason}: ${fmtN(fromBase(i, q, i.unit))} ${i.unit} ${name}`; }
+  return post({ date, memo, type: 'waste', lines: [{ a: '5100', dr: c }, { a: t === 'p' ? '1210' : '1200', cr: c }], ev: { kind: 'waste', t, id, q, c, reason, name } });
+}
+
+/* ============ engine: sales & money ============ */
+function sell({ lines, method, customer, ref, discount, date, tendered }) {
+  let sub = 0, cogs = 0; const L = [];
+  for (const l of lines) {
+    const p = prod(l.pid), price = l.price ?? p.price, c = r2(ucostP(p) * l.qty);
+    sub += price * l.qty; cogs += c; L.push({ pid: p.id, name: p.name, cat: p.cat, qty: l.qty, price, cost: c });
+  }
+  sub = r2(sub); cogs = r2(cogs); const disc = r2(Math.min(discount || 0, sub)), total = r2(sub - disc);
+  const e = post({ date, memo: 'Sale' + (customer ? ' · ' + customer : ''), type: 'sale',
+    lines: [{ a: rcvAcct(method), dr: total, party: method === 'credit' ? customer : '' }, { a: '4900', dr: disc }, { a: '4000', cr: sub }, { a: '5000', dr: cogs }, { a: '1210', cr: cogs }],
+    ev: { kind: 'sale', lines: L, method, customer, ref, disc, total, tendered } });
+  L.forEach(l => { const p = prod(l.pid); p.pqty -= l.qty; p.pvalue = r2(p.pvalue - l.cost); });
+  return e;
+}
+function spend({ acct, amount, desc, method, supplier, date }) {
+  amount = r2(amount);
+  return post({ date, memo: desc || acctName(acct), type: 'expense', lines: [{ a: acct, dr: amount }, { a: payAcct(method), cr: amount, party: method === 'credit' ? supplier : '' }] });
+}
+function paySupplier({ party, amount, method, date }) {
+  return post({ date, memo: 'Paid supplier · ' + party, type: 'payment', lines: [{ a: '2000', dr: amount, party }, { a: payAcct(method), cr: amount }] });
+}
+function collectFrom({ party, amount, method, date }) {
+  return post({ date, memo: 'Payment received · ' + party, type: 'receipt', lines: [{ a: rcvAcct(method), dr: amount }, { a: '1100', cr: amount, party }] });
+}
+function ownerMoney({ kind, amount, method, memo, date }) {
+  return kind === 'in'
+    ? post({ date, memo: memo || 'Owner put money in', type: 'owner', lines: [{ a: rcvAcct(method), dr: amount }, { a: '3000', cr: amount }] })
+    : post({ date, memo: memo || 'Owner took money out', type: 'owner', lines: [{ a: '3100', dr: amount }, { a: rcvAcct(method), cr: amount }] });
+}
+function countCash({ counted, date }) {
+  const exp = balOf('1000'), diff = r2(counted - exp); let e = null;
+  if (Math.abs(diff) >= 0.005) e = post({ date, memo: 'Cash count difference', type: 'count', lines: diff > 0 ? [{ a: '1000', dr: diff }, { a: '6950', cr: diff }] : [{ a: '6950', dr: -diff }, { a: '1000', cr: -diff }] });
+  S.closes.push({ id: uid(), date, expected: exp, counted, diff, eid: e && e.id });
+  return diff;
+}
+
+/* ============ engine: orders ============ */
+const ORDER_FLOW = ['booked', 'kitchen', 'ready', 'delivered'];
+const ORDER_LABEL = { booked: 'Booked', kitchen: 'In the kitchen', ready: 'Ready', delivered: 'Delivered', cancelled: 'Cancelled' };
+const orderTotal = o => r2(o.lines.reduce((s, l) => s + l.qty * l.price, 0));
+const orderPaid = o => r2(o.payments.reduce((s, p) => s + p.amt, 0));
+function orderCost(o) {
+  let ingC = 0, prodC = 0;
+  for (const b of o.bom || []) { const i = ing(b.ing); if (i) ingC += toBase(i, b.q, b.u) * ucost(i); }
+  for (const l of o.lines) if (l.pid) { const p = prod(l.pid); if (p) prodC += ucostP(p) * l.qty; }
+  return { ing: r2(ingC), prod: r2(prodC), extra: r2(o.extra || 0), total: r2(ingC + prodC + (o.extra || 0)) };
+}
+function newOrder(d) { const o = { id: uid(), num: ++S.onum, status: 'booked', payments: [], created: today(), extra: 0, bom: [], lines: [], ...d }; S.orders.push(o); return o; }
+function payOrder(o, amt, method, date) {
+  amt = r2(amt); const after = o.status === 'delivered';
+  const e = post({ date, memo: (after ? 'Balance' : 'Deposit') + ` · order #${o.num} ${o.customer}`, type: 'orderpay',
+    lines: after ? [{ a: rcvAcct(method), dr: amt }, { a: '1100', cr: amt, party: o.customer }] : [{ a: rcvAcct(method), dr: amt }, { a: '2100', cr: amt, party: o.customer }],
+    ref: { order: o.id }, ev: { kind: 'opay', oid: o.id } });
+  o.payments.push({ eid: e.id, amt, date: date || today(), method, after });
+  return e;
+}
+function deliverOrder(o, { date, collect, method }) {
+  const price = orderTotal(o), held = r2(o.payments.filter(p => !p.after).reduce((s, p) => s + p.amt, 0));
+  const applied = Math.min(held, price), ar = r2(price - applied);
+  const rev = o.kind === 'cake' ? '4100' : o.kind === 'catering' ? '4200' : '4000';
+  post({ date, memo: `Order #${o.num} delivered · ${o.customer}`, type: 'order', lines: [{ a: '2100', dr: applied, party: o.customer }, { a: '1100', dr: ar, party: o.customer }, { a: rev, cr: price }], ref: { order: o.id }, ev: { kind: 'orev' } });
+  const used = [], pu = []; let ingC = 0, prodC = 0;
+  for (const b of o.bom || []) { const i = ing(b.ing); if (!i) continue; const q = toBase(i, b.q, b.u), c = r2(q * ucost(i)); i.qty -= q; i.value = r2(i.value - c); used.push({ id: i.id, q, c }); ingC += c; }
+  for (const l of o.lines) if (l.pid) { const p = prod(l.pid); if (!p) continue; const c = r2(ucostP(p) * l.qty); p.pqty -= l.qty; p.pvalue = r2(p.pvalue - c); pu.push({ pid: p.id, q: l.qty, c }); prodC += c; }
+  ingC = r2(ingC); prodC = r2(prodC); const extra = r2(o.extra || 0), total = r2(ingC + prodC + extra);
+  post({ date, memo: `Cost of order #${o.num}`, type: 'order', lines: [{ a: '5000', dr: total }, { a: '1200', cr: ingC }, { a: '1210', cr: prodC }, { a: '1000', cr: extra }], ref: { order: o.id }, ev: { kind: 'ocost', ing: used, prods: pu } });
+  o.status = 'delivered'; o.doneOn = date || today(); o.price = price; o.cost = total;
+  if (collect > 0) payOrder(o, collect, method, date);
+}
+function cancelOrder(o, refund, date) {
+  const held = r2(o.payments.filter(p => !p.after).reduce((s, p) => s + p.amt, 0));
+  if (held > 0) post({ date, memo: (refund ? 'Deposit refunded' : 'Deposit kept') + ` · order #${o.num} ${o.customer}`, type: 'order',
+    lines: [{ a: '2100', dr: held, party: o.customer }, refund ? { a: '1000', cr: held } : { a: '4800', cr: held }], ref: { order: o.id }, ev: { kind: 'ocancel' } });
+  o.status = 'cancelled';
+}
+
+/* ============ void ============ */
+function canVoid(e) { return !e.voided && e.type !== 'reversal' && !(e.ref && e.ref.order && !(e.ev && e.ev.kind === 'opay')); }
+function voidEntry(id) {
+  const e = S.entries.find(x => x.id === id); if (!e || !canVoid(e)) return false;
+  const ev = e.ev;
+  if (ev) {
+    if (ev.kind === 'buy') { const i = ing(ev.id); if (i) { i.qty -= ev.base; i.value = r2(i.value - ev.cost); } }
+    else if (ev.kind === 'cook') { ev.ing.forEach(x => { const i = ing(x.id); if (i) { i.qty += x.q; i.value = r2(i.value + x.c); } }); const p = prod(ev.pid); if (p) { p.pqty -= ev.units; p.pvalue = r2(p.pvalue - ev.total); } }
+    else if (ev.kind === 'stockin') { const p = prod(ev.pid); if (p) { p.pqty -= ev.units; p.pvalue = r2(p.pvalue - ev.cost); } }
+    else if (ev.kind === 'sale') ev.lines.forEach(l => { const p = prod(l.pid); if (p) { p.pqty += l.qty; p.pvalue = r2(p.pvalue + l.cost); } });
+    else if (ev.kind === 'waste') { if (ev.t === 'p') { const p = prod(ev.id); if (p) { p.pqty += ev.q; p.pvalue = r2(p.pvalue + ev.c); } } else { const i = ing(ev.id); if (i) { i.qty += ev.q; i.value = r2(i.value + ev.c); } } }
+    else if (ev.kind === 'opay') { const o = ord(ev.oid); if (o) o.payments = o.payments.filter(x => x.eid !== e.id); }
+  }
+  const rev = post({ date: today(), memo: `Reversal of #${e.n} · ${e.memo}`, type: 'reversal', lines: e.lines.map(l => ({ a: l.a, dr: l.cr, cr: l.dr, party: l.party })), ref: e.ref });
+  e.voided = true; e.reversedBy = rev.id; rev.reverses = e.id; return true;
+}
+
+/* ============ reports ============ */
+function rangeOf(p) {
+  const t = today();
+  if (p === 'today') return [t, t];
+  if (p === '7d') return [addDays(t, -6), t];
+  if (p === '30d') return [addDays(t, -29), t];
+  if (p === 'month') return [t.slice(0, 8) + '01', t];
+  if (p === 'lastmonth') { const d = new Date(); const a = new Date(d.getFullYear(), d.getMonth() - 1, 1), b = new Date(d.getFullYear(), d.getMonth(), 0); return [ymd(a), ymd(b)]; }
+  if (p === 'year') return [t.slice(0, 5) + '01-01', t];
+  if (p === 'custom') return [UI.from || t, UI.to || t];
+  return ['0000-00-00', '9999-99-99'];
+}
+function pnl(from, to) {
+  const m = netByAcct(from, to); const g = a => m[a] || 0;
+  const income = ACCTS.filter(a => a[2] === 'R').map(a => ({ a: a[0], name: a[1], v: -g(a[0]) })).filter(x => Math.abs(x.v) > 0.004);
+  const revenue = r2(income.reduce((s, x) => s + x.v, 0)), cogs = g('5000'), gross = r2(revenue - cogs);
+  const exps = ACCTS.filter(a => a[2] === 'X' && a[0] !== '5000').map(a => ({ a: a[0], name: a[1], v: g(a[0]) })).filter(x => Math.abs(x.v) > 0.004);
+  const expenses = r2(exps.reduce((s, x) => s + x.v, 0));
+  return { income, revenue, cogs, gross, exps, expenses, net: r2(gross - expenses) };
+}
+function balanceSheet(asAt) {
+  const m = netByAcct('0000-00-00', asAt); const rows = t => ACCTS.filter(a => a[2] === t).map(a => ({ a: a[0], name: a[1], v: nat(a[0], m[a[0]] || 0) })).filter(x => Math.abs(x.v) > 0.004);
+  const A = rows('A'), L = rows('L'), Q = rows('Q');
+  const profit = r2(-ACCTS.filter(a => a[2] === 'R' || a[2] === 'X').reduce((s, a) => s + (m[a[0]] || 0), 0));
+  const tA = r2(A.reduce((s, x) => s + x.v, 0)), tL = r2(L.reduce((s, x) => s + x.v, 0));
+  const tQ = r2(Q.reduce((s, x) => s + x.v, 0) + profit);
+  return { A, L, Q, profit, tA, tL, tQ, ok: Math.abs(tA - tL - tQ) < 0.01 };
+}
+function daily(from, to) {
+  const out = {}; for (let d = from; d <= to; d = addDays(d, 1)) out[d] = { d, rev: 0, cogs: 0 };
+  for (const e of S.entries) { const o = out[e.date]; if (!o) continue; for (const l of e.lines) { if (acctType(l.a) === 'R') o.rev += l.cr - l.dr; if (l.a === '5000') o.cogs += l.dr - l.cr; } }
+  return Object.values(out).map(o => ({ ...o, rev: r2(o.rev), cogs: r2(o.cogs), gp: r2(o.rev - o.cogs) }));
+}
+function productStats(from, to) {
+  const m = {}; let tx = 0; const pay = { cash: 0, mobile: 0, credit: 0 };
+  for (const e of S.entries) {
+    if (e.voided || e.date < from || e.date > to) continue;
+    if (e.ev && e.ev.kind === 'sale') { tx++; pay[e.ev.method] += e.ev.total; for (const l of e.ev.lines) { const r = m[l.pid] || (m[l.pid] = { pid: l.pid, name: l.name, units: 0, sales: 0, cost: 0, waste: 0 }); r.units += l.qty; r.sales += l.qty * l.price; r.cost += l.cost; } }
+    if (e.ev && e.ev.kind === 'waste' && e.ev.t === 'p') { const r = m[e.ev.id] || (m[e.ev.id] = { pid: e.ev.id, name: e.ev.name, units: 0, sales: 0, cost: 0, waste: 0 }); r.waste += e.ev.c; }
+  }
+  return { rows: Object.values(m).map(r => ({ ...r, sales: r2(r.sales), cost: r2(r.cost), waste: r2(r.waste) })).sort((a, b) => (b.sales - b.cost) - (a.sales - a.cost)), tx, pay };
+}
+function reconcile() {
+  const ingSum = r2(S.ings.reduce((s, i) => s + i.value, 0)), prodSum = r2(S.prods.reduce((s, p) => s + p.pvalue, 0));
+  return { ingSum, prodSum, ingBook: balOf('1200'), prodBook: balOf('1210') };
+}
+
+/* ============ demo data ============ */
+function seedDemo() {
+  S = blank(); S.demo = true;
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+  const D = n => addDays(today(), -n);
+  const mk = (name, fam, unit, extra = {}) => { const i = { id: uid(), name, fam, unit, custom: null, qty: 0, value: 0, lastCost: 0, low: 0, off: false, ...extra }; S.ings.push(i); return i; };
+  const flour = mk('Flour', 'w', 'kg', { low: 5000 }), sugar = mk('Sugar', 'w', 'kg'), yeast = mk('Yeast', 'w', 'g'), oil = mk('Cooking oil', 'v', 'L', { low: 2000 });
+  const eggs = mk('Eggs', 'c', 'pc'), milk = mk('Milk', 'v', 'L'), rice = mk('Rice', 'w', 'kg', { custom: { name: 'cup', base: 190 }, low: 8000 });
+  const chicken = mk('Chicken', 'w', 'kg', { low: 5000 }), onion = mk('Onions', 'w', 'kg'), tomato = mk('Tomato paste', 'w', 'kg'), cheese = mk('Cheese', 'w', 'kg');
+  const day = 11;
+  ownerMoney({ kind: 'in', amount: 3000, method: 'cash', memo: 'Opening cash', date: D(day + 1) });
+  const buy = (i, q, u, cost, method = 'cash', supplier = '', n = day) => buyIng({ id: i.id, q, u, cost, method, supplier, date: D(n) });
+  buy(flour, 40, 'kg', 140, 'credit', 'Pacific Wholesale'); buy(sugar, 10, 'kg', 50); buy(yeast, 500, 'g', 20); buy(oil, 20, 'L', 180);
+  buy(eggs, 90, 'pc', 72); buy(milk, 10, 'L', 80); buy(rice, 40, 'kg', 240); buy(chicken, 35, 'kg', 490, 'cash'); buy(onion, 10, 'kg', 40);
+  buy(tomato, 8, 'kg', 96); buy(cheese, 5, 'kg', 190);
+  const P = (name, cat, kind, unit, yld, over, price, recipe) => { const p = { id: uid(), name, cat, kind, unit, yield: yld, over, price, recipe: recipe.map(([i, q, u]) => ({ ing: i.id, q, u })), pqty: 0, pvalue: 0, lastCost: 0, off: false }; S.prods.push(p); return p; };
+  const donut = P('Donut', 'Bakery', 'count', 'piece', 24, 6, 1.5, [[flour, 1, 'kg'], [sugar, 0.15, 'kg'], [yeast, 15, 'g'], [oil, 0.5, 'L'], [eggs, 3, 'pc'], [milk, 0.3, 'L']]);
+  const pizza = P('Pizza (large)', 'Bakery', 'count', 'pizza', 6, 8, 18, [[flour, 2, 'kg'], [yeast, 20, 'g'], [oil, 0.2, 'L'], [tomato, 0.5, 'kg'], [cheese, 1.2, 'kg'], [onion, 0.3, 'kg']]);
+  const rp = P('Rice', 'Meals', 'portion', 'plate', 40, 5, 3.5, [[rice, 3, 'kg'], [oil, 0.1, 'L']]);
+  const stew = P('Chicken stew', 'Meals', 'portion', 'serve', 30, 5, 6, [[chicken, 3, 'kg'], [onion, 0.5, 'kg'], [tomato, 0.4, 'kg'], [oil, 0.15, 'L']]);
+  const drink = P('Soft drink 500ml', 'Drinks', 'resell', 'bottle', 1, 0, 5, []); drink.lastCost = 3.2;
+  stockIn({ pid: drink.id, units: 48, cost: 153.6, method: 'cash', date: D(day) });
+  const names = ['Joseph', 'Mrs Kila', 'Tau'];
+  for (let n = 10; n >= 0; n--) {
+    const wd = new Date(D(n) + 'T12:00:00').getDay();
+    cook({ pid: donut.id, units: 48, date: D(n) }); cook({ pid: rp.id, units: 40, date: D(n) }); cook({ pid: stew.id, units: 30, date: D(n) });
+    if (n % 4 === 0) cook({ pid: pizza.id, units: 6, date: D(n) });
+    const target = { [donut.id]: ri(38, 48) + (donut.pqty - 48 > 0 ? 0 : 0), [rp.id]: ri(30, 40), [stew.id]: ri(22, 30), [pizza.id]: Math.min(pizza.pqty, ri(3, 6)), [drink.id]: Math.min(drink.pqty, ri(4, 9)) };
+    Object.keys(target).forEach(k => { target[k] = Math.min(target[k], Math.max(0, Math.floor(prod(k).pqty))); });
+    for (let guard = 0; guard < 80; guard++) {
+      const open = S.prods.filter(p => target[p.id] > 0); if (!open.length) break;
+      const lines = []; const k = ri(1, Math.min(3, open.length));
+      for (let j = 0; j < k; j++) { const p = open[ri(0, open.length - 1)]; if (lines.find(l => l.pid === p.id) || target[p.id] <= 0) continue; const q = Math.min(target[p.id], p.kind === 'count' ? ri(1, 6) : ri(1, 3)); lines.push({ pid: p.id, qty: q }); target[p.id] -= q; }
+      if (!lines.length) continue;
+      const r = rnd(); const method = r < 0.58 ? 'cash' : r < 0.9 ? 'mobile' : 'credit';
+      sell({ lines, method, customer: method === 'credit' ? names[ri(0, 2)] : '', date: D(n), discount: 0 });
+    }
+    [rp, stew].forEach(p => { if (p.pqty > 0.5) writeOff({ t: 'p', id: p.id, q: p.pqty, reason: 'Leftover', date: D(n) }); });
+    if (donut.pqty > 6 && n % 3 === 0) writeOff({ t: 'p', id: donut.id, q: 4, reason: 'Stale', date: D(n) });
+    if (n === 10 || n === 7 || n === 3) spend({ acct: '6200', amount: 110, desc: 'Gas and firewood', method: 'cash', date: D(n) });
+    if (n === 9) spend({ acct: '6100', amount: 250, desc: 'Shop rent', method: 'mobile', date: D(n) });
+    if (n === 5) spend({ acct: '6000', amount: 120, desc: 'Helper wages', method: 'cash', date: D(n) });
+    if (n === 3) collectFrom({ party: 'Joseph', amount: Math.min(20, partyBalances('1100').find(x => x.party === 'Joseph')?.amt || 0), method: 'cash', date: D(n) });
+  }
+  paySupplier({ party: 'Pacific Wholesale', amount: 80, method: 'cash', date: D(2) });
+  ownerMoney({ kind: 'out', amount: 100, method: 'cash', memo: 'Owner took money for home', date: D(3) });
+  const oneCake = newOrder({ kind: 'cake', customer: 'Aunty Rose', phone: '', due: D(4), time: '15:00', notes: 'Chocolate birthday cake, 2 layers, "Happy 40th"', lines: [{ desc: 'Chocolate birthday cake (2 layers)', qty: 1, price: 280 }], bom: [{ ing: flour.id, q: 0.8, u: 'kg' }, { ing: sugar.id, q: 0.6, u: 'kg' }, { ing: eggs.id, q: 6, u: 'pc' }, { ing: milk.id, q: 0.25, u: 'L' }], extra: 45 });
+  payOrder(oneCake, 100, 'cash', D(8)); deliverOrder(oneCake, { date: D(4), collect: 180, method: 'cash' });
+  const cake2 = newOrder({ kind: 'cake', customer: 'Mr Kapi', phone: '', due: addDays(today(), 2), time: '10:00', notes: 'Vanilla wedding cake, 3 tiers', lines: [{ desc: 'Vanilla wedding cake (3 tiers)', qty: 1, price: 650 }], bom: [{ ing: flour.id, q: 2, u: 'kg' }, { ing: sugar.id, q: 1.5, u: 'kg' }, { ing: eggs.id, q: 18, u: 'pc' }, { ing: milk.id, q: 0.8, u: 'L' }], extra: 120, status: 'kitchen' });
+  payOrder(cake2, 200, 'mobile', D(1));
+  const cat = newOrder({ kind: 'catering', customer: 'Milne Bay Youth Group', phone: '', due: addDays(today(), 5), time: '12:00', notes: 'Church fundraiser lunch, 60 people', lines: [{ desc: 'Lunch plate: rice, chicken stew, drink', qty: 60, price: 14 }], bom: [{ ing: rice.id, q: 6, u: 'kg' }, { ing: chicken.id, q: 6, u: 'kg' }, { ing: onion.id, q: 1, u: 'kg' }, { ing: tomato.id, q: 0.8, u: 'kg' }, { ing: oil.id, q: 0.5, u: 'L' }], extra: 220 });
+  payOrder(cat, 300, 'cash', today());
+  countCash({ counted: r2(balOf('1000') + 1), date: D(1) });
+}
+/* ============ UI state & primitives ============ */
+const UI = { view: 'today', sub: { kitchen: 'cook', books: 'pnl' }, cart: [], disc: 0, cat: 'All', q: '', period: 'month', from: '', to: '', of: 'open', unlocked: false, jl: 60, jq: '', cookPid: '', modal: '' };
+const ICON = {
+  today: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  sell: '<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M8 8h8M8 12h8"/>',
+  kitchen: '<path d="M4 10h16v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M2 10h2M20 10h2M9 6c0-1.5 1-1.5 1-3M14 6c0-1.5 1-1.5 1-3"/>',
+  stock: '<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>',
+  orders: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  books: '<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>', x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  check: '<path d="M5 12l5 5 9-10"/>', trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  undo: '<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  cart: '<path d="M3 4h3l2 12h10l2-9H7"/><circle cx="10" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/>',
+  edit: '<path d="M4 20l1-4L16 5l3 3L8 19z"/>', down: '<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>', chev: '<path d="M9 6l6 6-6 6"/>',
+  search: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>'
+};
+const ic = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n] || ''}</svg>`;
+const NAV = [['today', 'Today'], ['sell', 'Sell'], ['kitchen', 'Kitchen'], ['stock', 'Stock'], ['orders', 'Orders'], ['books', 'Books']];
+const isOwner = () => !S.pin || UI.unlocked;
+const chip = (t, tone = '') => `<span class="chip ${tone}">${esc(t)}</span>`;
+const fld = (label, inner, hint = '', cls = '') => `<label class="fld ${cls}"><span class="lbl">${label}</span>${inner}${hint ? `<small>${hint}</small>` : ''}</label>`;
+const radios = (name, opts, val) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<label class="opt"><input type="radio" name="${name}" value="${v}" ${v === val ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`;
+const PAY3 = [['cash', 'Cash'], ['mobile', 'Mobile money'], ['credit', 'On credit']], PAY2 = [['cash', 'Cash'], ['mobile', 'Mobile money']];
+const numIn = (name, val = '', extra = '') => `<input name="${name}" type="number" step="any" min="0" inputmode="decimal" value="${val}" ${extra}>`;
+const empty = (title, text, btn = '') => `<div class="empty"><b>${title}</b><p>${text}</p>${btn}</div>`;
+const KIND = { count: 'Counted item', portion: 'Portion', resell: 'Bought to resell' };
+
+let toastT;
+function toast(msg, tone = '') {
+  const t = $('#toast'); t.innerHTML = `<div class="toast ${tone}">${esc(msg)}</div>`;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.innerHTML = ''; }, 3200);
+}
+function openSheet(title, body, { wide = false, kind = '' } = {}) {
+  const m = $('#modal'); UI.modal = kind;
+  m.innerHTML = `<div class="sheet ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}" tabindex="-1"><div class="sheet-head"><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-a="close" aria-label="Close">${ic('x')}</button></div><div class="sheet-body">${body}</div></div>`;
+  m.hidden = false; document.body.classList.add('noscroll');
+  const f = $('form', m); if (f) { applyWhen(f); runLive(f); }
+  $('.sheet', m).focus({ preventScroll: true });
+}
+function closeModal() { const m = $('#modal'); m.hidden = true; m.innerHTML = ''; UI.modal = ''; document.body.classList.remove('noscroll'); }
+let CONFIRM = null;
+function ask(title, text, okLabel, cb, danger = false) {
+  CONFIRM = cb;
+  openSheet(title, `<p class="para">${text}</p><div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button type="button" class="btn ${danger ? 'danger' : 'primary'}" data-a="confirmYes">${okLabel}</button></div>`, { kind: 'ask' });
+}
+function applyWhen(f) {
+  const fd = new FormData(f);
+  $$('[data-when]', f).forEach(el => { const [k, v] = el.dataset.when.split('='); el.hidden = !v.split('|').includes(String(fd.get(k))); });
+}
+function runLive(f) { const fn = LIVE[f.dataset.live]; if (fn) fn(f); }
+function readRows(f) {
+  const ri = $$('[name=ri]', f), rq = $$('[name=rq]', f), ru = $$('[name=ru]', f);
+  return ri.map((s, k) => ({ ing: s.value, q: parseFloat(rq[k].value) || 0, u: ru[k].value })).filter(r => r.ing && r.q > 0);
+}
+function ingRow(r = {}) {
+  const opts = S.ings.filter(i => !i.off || i.id === r.ing).map(i => `<option value="${i.id}" ${i.id === r.ing ? 'selected' : ''}>${esc(i.name)}</option>`).join('');
+  const i = ing(r.ing);
+  return `<div class="rrow"><select name="ri" data-chg="ingUnit" aria-label="Ingredient"><option value="">Choose ingredient</option>${opts}</select>${numIn('rq', r.q ?? '', 'placeholder="Qty" aria-label="Quantity"')}<select name="ru" aria-label="Unit">${i ? unitOpts(i, r.u || i.unit) : '<option></option>'}</select><button type="button" class="icon-btn" data-a="rowdel" aria-label="Remove row">${ic('x')}</button></div>`;
+}
+const rowsBlock = (rows, label = 'Ingredients') => `<div class="rows" data-rows="ing"><div class="lbl">${label}</div><div class="rows-list">${rows.map(ingRow).join('')}</div><button type="button" class="btn ghost sm" data-a="rowadd" data-t="ing">${ic('plus')} Add ingredient</button></div>`;
+const stockWarn = c => c.lines.filter(l => l.short).map(l => `${esc(l.name)}: need ${fmtN(l.disp)} ${esc(l.u)}, have ${stockLabel(l.i)}`);
+
+/* ============ nav & shell ============ */
+function renderNav() {
+  const due = S.orders.filter(o => !['delivered', 'cancelled'].includes(o.status) && o.due && daysBetween(today(), o.due) <= 1).length;
+  $('#nav').innerHTML = NAV.map(([v, l]) => `<button type="button" class="nav-btn" data-a="go" data-v="${v}" aria-current="${UI.view === v}">${ic(v)}<span>${l}</span>${v === 'orders' && due ? `<i class="dot" aria-label="${due} due soon">${due}</i>` : ''}</button>`).join('');
+}
+function render() {
+  document.body.classList.toggle('locked', !isOwner());
+  $('#bizname').textContent = S.biz;
+  $('#todaytxt').textContent = fmtD(today());
+  $('#lockbtn').hidden = !(S.pin && UI.unlocked);
+  renderNav();
+  const gated = !isOwner() && (UI.view === 'books' || UI.view === 'settings');
+  let html = gated ? vLock() : (V[UI.view] || V.today)();
+  if (S.demo) html = `<div class="demo"><div><b>You are looking at example data.</b> Try everything, then clear it and enter your own.</div><button type="button" class="btn sm primary" data-a="startFresh">Start my own books</button></div>` + html;
+  if (!storageOK) html = `<div class="demo bad"><div><b>This browser is not saving your data.</b> Download a backup from Settings often.</div></div>` + html;
+  $('#main').innerHTML = html;
+  const cm = $('#modal');
+  if (!cm.hidden && UI.modal === 'cart') $('.sheet-body', cm).innerHTML = cartHTML(true);
+  document.body.dataset.view = UI.view;
+}
+function commit() { persist(); render(); }
+function vLock() {
+  return `<div class="card narrow"><h2>${ic('lock')} Owner area</h2><p class="para">Enter your PIN to see books, costs and settings.</p><form data-submit="unlock" class="stack">${fld('PIN', '<input name="pin" type="password" inputmode="numeric" autocomplete="off" required>')}<button class="btn primary" type="submit">Unlock</button></form></div>`;
+}
+
+/* ============ chart ============ */
+function niceMax(v) { const e = Math.pow(10, Math.floor(Math.log10(v))), m = v / e; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * e; }
+function chart(days, showGP = true) {
+  const W = 520, H = 230, L = 52, R = 8, T = 14, B = 34, iw = W - L - R, ih = H - T - B;
+  const mx = niceMax(Math.max(1, ...days.map(d => d.rev), ...(showGP ? days.map(d => d.gp) : [0])));
+  const bw = iw / days.length, Y = v => T + ih * (1 - Math.max(0, v) / mx);
+  const ticks = [0, mx / 2, mx].map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="grid"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" class="ax">${v >= 1000 ? fmtN(v / 1000, 1) + 'k' : fmtN(v)}</text>`).join('');
+  const step = days.length > 16 ? 5 : days.length > 8 ? 2 : 1;
+  const bars = days.map((d, i) => {
+    const x = L + i * bw + bw * .16, w = bw * .68, y = Y(d.rev), h = T + ih - y;
+    const lbl = i % step === 0 || i === days.length - 1 ? `<text x="${L + i * bw + bw / 2}" y="${H - 12}" text-anchor="middle" class="ax">${d.d.slice(8)}</text>` : '';
+    return `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(0, h)}" rx="3" class="bar"><title>${fmtD(d.d)}: sales ${money(d.rev)}</title></rect>${lbl}`;
+  }).join('');
+  const pts = days.map((d, i) => [L + i * bw + bw / 2, Y(d.gp)]);
+  const gp = showGP ? `<g class="owner-only"><polyline points="${pts.map(p => p.join(',')).join(' ')}" class="gpline"/>${pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i === pts.length - 1 ? 5 : 3}" class="gpdot"><title>${fmtD(days[i].d)}: profit ${money(days[i].gp)}</title></circle>`).join('')}</g>` : '';
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily sales and profit">${ticks}${bars}${gp}</svg>`;
+}
+const V = {}, ACT = {}, SUB = {}, LIVE = {}, CHG = {};
+const tabsRow = (k, items, cur) => `<div class="tabs scroll" role="tablist">${items.map(([v, l]) => `<button type="button" class="tab" data-a="sub" data-k="${k}" data-v="${v}" aria-pressed="${cur === v}">${l}</button>`).join('')}</div>`;
+const head = (t, right = '') => `<div class="page-head"><h1>${t}</h1><div class="head-actions">${right}</div></div>`;
+
+/* ============ TODAY ============ */
+V.today = function () {
+  const t = today(), p = pnl(t, t), cash = balOf('1000'), mob = balOf('1010');
+  const debtors = partyBalances('1100'), ar = r2(debtors.reduce((s, x) => s + x.amt, 0));
+  const nSales = S.entries.filter(e => e.date === t && e.ev && e.ev.kind === 'sale' && !e.voided).length;
+  const days = daily(addDays(t, -13), t);
+  const open = S.orders.filter(o => !['delivered', 'cancelled'].includes(o.status)).sort((a, b) => (a.due || '9') < (b.due || '9') ? -1 : 1);
+  const al = [];
+  S.ings.filter(i => !i.off).forEach(i => {
+    if (i.qty < -1e-9) al.push(['bad', `${esc(i.name)} stock is below zero. Record the purchase you missed.`, `<button class="btn sm" data-a="buy" data-id="${i.id}">Record purchase</button>`]);
+    else if (i.low > 0 && i.qty <= i.low) al.push(['warn', `${esc(i.name)} is running low: ${stockLabel(i)} left.`, `<button class="btn sm" data-a="buy" data-id="${i.id}">Buy more</button>`]);
+  });
+  open.filter(o => o.due && daysBetween(t, o.due) <= 0).forEach(o => al.push([daysBetween(t, o.due) < 0 ? 'bad' : 'warn', `Order #${o.num} for ${esc(o.customer)} is due ${relDay(o.due)}${o.time ? ' at ' + fmtT(o.time) : ''}.`, `<button class="btn sm" data-a="order" data-id="${o.id}">Open</button>`]));
+  if (nSales && !S.closes.some(c => c.date === t)) al.push(['info', 'You have not counted the cash drawer today.', `<button class="btn sm" data-a="closeDay">Close the day</button>`]);
+  S.prods.filter(x => !x.off && x.kind !== 'resell' && x.price > 0).forEach(x => {
+    const c = recipeUnitCost(x), m = marginOf(x.price, c);
+    if (c > 0 && m < S.target) al.push(['warn owner-only', `${esc(x.name)} earns ${pct(m)} but your target is ${S.target}%. A price of ${money(nicePrice(c / (1 - S.target / 100)))} would reach it.`, `<button class="btn sm" data-a="editProd" data-id="${x.id}">Edit price</button>`]);
+  });
+  const lastClose = S.closes[S.closes.length - 1];
+  return `${head(fmtD(t), '')}
+  <div class="tiles">
+    <div class="tile"><span class="tl">Sales today</span><b class="big">${money(p.revenue)}</b><span class="ts">${nSales} ${nSales === 1 ? 'sale' : 'sales'}</span></div>
+    <div class="tile owner-only"><span class="tl">Profit today</span><b class="big ${p.gross < 0 ? 'neg' : ''}">${money(p.gross)}</b><span class="ts">sales minus cost of food</span></div>
+    <div class="tile"><span class="tl">Money in hand</span><b class="big">${money(cash + mob)}</b><span class="ts">cash ${money(cash, 0)} · mobile ${money(mob, 0)}</span></div>
+    <div class="tile"><span class="tl">Customers owe you</span><b class="big">${money(ar)}</b><span class="ts">${debtors.length} ${debtors.length === 1 ? 'person' : 'people'}</span></div>
+  </div>
+  <div class="quick">
+    <button type="button" class="btn primary" data-a="go" data-v="sell">${ic('sell')} New sale</button>
+    <button type="button" class="btn" data-a="go" data-v="kitchen">${ic('kitchen')} Log cooking</button>
+    <button type="button" class="btn" data-a="newOrder">${ic('orders')} New order</button>
+    <button type="button" class="btn" data-a="recExpense">${ic('plus')} Expense</button>
+  </div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h2>Last 14 days</h2><div class="legend"><i class="k bar"></i>Sales<i class="k gp owner-only"></i><span class="owner-only">Profit</span></div></div>${chart(days)}</section>
+    <section class="card"><div class="card-h"><h2>Coming up</h2><button class="btn ghost sm" data-a="go" data-v="orders">All orders</button></div>
+      ${open.length ? open.slice(0, 4).map(o => `<button type="button" class="orow" data-a="order" data-id="${o.id}"><span class="od ${o.due && daysBetween(t, o.due) <= 0 ? 'hot' : ''}"><b>${o.due ? o.due.slice(8) : '–'}</b><small>${o.due ? new Date(o.due + 'T12:00:00').toLocaleDateString('en-GB', { month: 'short' }) : ''}</small></span><span class="ob"><b>${esc(o.customer)}</b><small>${o.kind === 'cake' ? 'Cake' : o.kind === 'catering' ? 'Catering' : 'Order'} · ${esc(o.lines.map(l => l.desc || l.name).join(', ')).slice(0, 46)}</small></span><span class="or">${chip(ORDER_LABEL[o.status], o.status === 'ready' ? 'good' : o.status === 'kitchen' ? 'info' : '')}</span></button>`).join('') : empty('No open orders', 'Cake and catering orders you take will show here.', `<button class="btn sm" data-a="newOrder">Add an order</button>`)}
+    </section>
+  </div>
+  <div class="grid2">
+    <section class="card"><div class="card-h"><h2>Needs attention</h2></div>
+      ${al.length ? al.map(([tone, txt, btn]) => `<div class="alert ${tone}">${ic(tone.startsWith('info') ? 'check' : 'warn')}<span>${txt}</span>${btn}</div>`).join('') : `<p class="para muted">Nothing needs attention right now.</p>`}
+    </section>
+    <section class="card"><div class="card-h"><h2>Close the day</h2></div>
+      <p class="para">Count the cash in your drawer. Any difference is recorded so your books stay true.</p>
+      ${lastClose ? `<p class="para muted">Last count ${relDay(lastClose.date)}: ${Math.abs(lastClose.diff) < 0.005 ? 'matched' : (lastClose.diff > 0 ? 'over by ' : 'short by ') + money(Math.abs(lastClose.diff))}.</p>` : ''}
+      <button type="button" class="btn primary" data-a="closeDay">Count cash</button>
+    </section>
+  </div>`;
+};
+
+/* ============ SELL ============ */
+const cartTotals = () => {
+  const sub = r2(UI.cart.reduce((s, l) => { const p = prod(l.pid); return s + (p ? p.price * l.qty : 0); }, 0));
+  const disc = r2(Math.min(Math.max(UI.disc || 0, 0), sub)); return { sub, disc, total: r2(sub - disc), n: UI.cart.reduce((s, l) => s + l.qty, 0) };
+};
+function gridHTML() {
+  const q = UI.q.trim().toLowerCase();
+  const list = S.prods.filter(p => !p.off && (UI.cat === 'All' || (p.cat || 'Other') === UI.cat) && (!q || p.name.toLowerCase().includes(q)));
+  if (!S.prods.filter(p => !p.off).length) return empty('Your menu is empty', 'Add a recipe in Kitchen, then it appears here ready to sell.', `<button class="btn primary" data-a="newProd">Add a recipe</button>`);
+  if (!list.length) return `<p class="para muted">Nothing matches.</p>`;
+  return list.map(p => `<button type="button" class="pcard" data-a="add" data-id="${p.id}"><span class="pn">${esc(p.name)}</span><span class="pp">${money(p.price)}</span><span class="pu">per ${esc(p.unit)}</span>${p.pqty > 0.0001 ? chip(fmtN(p.pqty, 1) + ' ready', 'good') : chip('none logged', 'warn')}</button>`).join('');
+}
+function cartHTML(modal) {
+  const T = cartTotals();
+  const lines = UI.cart.length ? UI.cart.map((l, i) => { const p = prod(l.pid); return `<div class="cline"><div class="cname">${esc(p.name)}<small>${money(p.price)} each</small></div><div class="step"><button type="button" data-a="qty" data-i="${i}" data-d="-1" aria-label="Less">${ic('minus')}</button><b>${l.qty}</b><button type="button" data-a="qty" data-i="${i}" data-d="1" aria-label="More">${ic('plus')}</button></div><span class="num">${money(p.price * l.qty)}</span></div>`; }).join('') : `<p class="para muted">Tap items on the menu to add them.</p>`;
+  return `<div class="card-h"><h2>${ic('cart')} Current sale</h2>${UI.cart.length ? `<button class="btn ghost sm" data-a="clearCart">Clear</button>` : ''}</div>
+  <div class="clines">${lines}</div>
+  <div class="ctotals"><label class="disc">Discount (K)<input type="number" step="any" min="0" inputmode="decimal" value="${UI.disc || ''}" data-in="disc" placeholder="0"></label>
+  <div class="trow big"><span>Total</span><b class="cart-total">${money(T.total)}</b></div></div>
+  <div class="paybtns"><button type="button" class="btn primary" data-a="pay" data-m="cash" ${UI.cart.length ? '' : 'disabled'}>Cash</button><button type="button" class="btn" data-a="pay" data-m="mobile" ${UI.cart.length ? '' : 'disabled'}>Mobile</button><button type="button" class="btn" data-a="pay" data-m="credit" ${UI.cart.length ? '' : 'disabled'}>On credit</button></div>`;
+}
+V.sell = function () {
+  const cats = ['All', ...new Set(S.prods.filter(p => !p.off).map(p => p.cat || 'Other'))];
+  const T = cartTotals();
+  return `${head('Sell')}<div class="sell"><div class="sell-main">
+    <div class="tabs scroll">${cats.map(c => `<button type="button" class="tab" data-a="cat" data-v="${esc(c)}" aria-pressed="${UI.cat === c}">${esc(c)}</button>`).join('')}</div>
+    <label class="search">${ic('search')}<input type="search" placeholder="Search menu" value="${esc(UI.q)}" data-in="search" aria-label="Search menu"></label>
+    <div class="pgrid" id="pgrid">${gridHTML()}</div></div>
+    <aside class="cartside card" id="cartside">${cartHTML(false)}</aside></div>
+    ${UI.cart.length ? `<button type="button" class="cartbar" data-a="openCart">${ic('cart')}<span>${T.n} ${T.n === 1 ? 'item' : 'items'}</span><b class="cart-total">${money(T.total)}</b><span class="go">View sale ${ic('chev')}</span></button>` : ''}`;
+};
+ACT.cat = el => { UI.cat = el.dataset.v; render(); };
+ACT.add = el => { const p = prod(el.dataset.id); const l = UI.cart.find(x => x.pid === p.id); l ? l.qty++ : UI.cart.push({ pid: p.id, qty: 1 }); render(); };
+ACT.qty = el => { const l = UI.cart[+el.dataset.i]; if (!l) return; l.qty += +el.dataset.d; if (l.qty <= 0) UI.cart.splice(+el.dataset.i, 1); if (!UI.cart.length) { UI.disc = 0; if (UI.modal === 'cart') closeModal(); } render(); };
+ACT.clearCart = () => { UI.cart = []; UI.disc = 0; if (UI.modal === 'cart') closeModal(); render(); };
+ACT.openCart = () => openSheet('Current sale', cartHTML(true), { kind: 'cart' });
+ACT.pay = el => openPay(el.dataset.m);
+function openPay(m) {
+  const T = cartTotals(); if (!UI.cart.length) return toast('The sale is empty');
+  const debtors = partyBalances('1100');
+  const body = `<form data-submit="pay" data-live="pay" class="stack"><input type="hidden" name="m" value="${m}">
+    <div class="paytotal"><span>Total to pay</span><b>${money(T.total)}</b></div>
+    ${m === 'cash' ? fld('Cash received (K)', numIn('tend', T.total, 'required autofocus')) + `<div class="change" id="chg"></div>` : ''}
+    ${m === 'mobile' ? fld('Reference number', '<input name="ref" type="text" autocomplete="off" placeholder="From the mobile money message">') : ''}
+    ${m === 'credit' ? fld('Customer name', `<input name="cust" type="text" list="debtors" autocomplete="off" required placeholder="Who will pay later?">`, 'This sale is added to what customers owe you.') + `<datalist id="debtors">${debtors.map(d => `<option value="${esc(d.party)}">`).join('')}</datalist>` : ''}
+    <div class="foot"><button type="button" class="btn ghost" data-a="close">Back</button><button class="btn primary" type="submit">Complete sale</button></div></form>`;
+  openSheet(m === 'cash' ? 'Cash sale' : m === 'mobile' ? 'Mobile money sale' : 'Sale on credit', body, { kind: 'pay' });
+}
+LIVE.pay = f => { const el = $('#chg', f); if (!el) return; const T = cartTotals(), t = parseFloat(f.tend.value) || 0; el.innerHTML = t >= T.total ? `Change to give: <b>${money(t - T.total)}</b>` : `<span class="neg">Short by ${money(T.total - t)}</span>`; };
+SUB.pay = (fd, f) => {
+  const m = fd.get('m'), T = cartTotals(); const tend = parseFloat(fd.get('tend')) || 0;
+  if (m === 'cash' && tend + 1e-9 < T.total) return toast('Cash received is less than the total', 'bad');
+  const cust = (fd.get('cust') || '').trim(); if (m === 'credit' && !cust) return toast('Enter the customer name', 'bad');
+  const e = sell({ lines: UI.cart.map(l => ({ pid: l.pid, qty: l.qty })), method: m, customer: cust, ref: fd.get('ref') || '', discount: T.disc, date: today(), tendered: m === 'cash' ? tend : 0 });
+  UI.cart = []; UI.disc = 0; persist(); render(); showReceipt(e.id);
+};
+function receiptText(e) {
+  const v = e.ev, w = 34, line = (a, b) => (a.length + b.length >= w ? a.slice(0, w - b.length - 1) : a).padEnd(w - b.length) + b;
+  const out = [S.biz, new Date(e.ts).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) + ' · Receipt ' + e.n, '-'.repeat(w)];
+  v.lines.forEach(l => out.push(line(`${l.qty} x ${l.name}`, money(l.qty * l.price))));
+  out.push('-'.repeat(w)); if (v.disc) out.push(line('Discount', '-' + money(v.disc)));
+  out.push(line('TOTAL', money(v.total)));
+  out.push(v.method === 'cash' ? line('Cash', money(v.tendered)) + '\n' + line('Change', money(v.tendered - v.total)) : v.method === 'mobile' ? 'Paid by mobile money' + (v.ref ? ' · ' + v.ref : '') : 'On credit · ' + v.customer);
+  out.push('', 'Thank you!'); return out.join('\n');
+}
+function showReceipt(id) {
+  const e = S.entries.find(x => x.id === id);
+  openSheet('Sale complete', `<pre class="receipt" id="rcpt">${esc(receiptText(e))}</pre><div class="foot"><button type="button" class="btn" data-a="copyReceipt">Copy receipt</button><button type="button" class="btn primary" data-a="close">New sale</button></div>`, { kind: 'receipt' });
+}
+ACT.copyReceipt = () => copyText($('#rcpt').textContent);
+function copyText(t) {
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($('#rcpt') || document.body); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Press and hold to copy the selected text'); };
+  try { navigator.clipboard.writeText(t).then(() => toast('Copied'), fallback); } catch (e) { fallback(); }
+}
+
+/* ============ KITCHEN ============ */
+V.kitchen = function () {
+  const s = UI.sub.kitchen;
+  return head('Kitchen', `<button type="button" class="btn sm" data-a="newProd">${ic('plus')} New recipe</button>`) + tabsRow('kitchen', [['cook', 'Cook a batch'], ['recipes', 'Recipes & prices'], ['waste', 'Leftovers & waste']], s) + (s === 'cook' ? kCook() : s === 'recipes' ? (isOwner() ? kRecipes() : vLock()) : kWaste());
+};
+function kCook() {
+  const prods = S.prods.filter(p => !p.off);
+  if (!prods.length) return empty('No recipes yet', 'Add a recipe once, then log each batch you cook. The system works out what each piece or plate really costs.', `<button class="btn primary" data-a="newProd">Add your first recipe</button>`);
+  const p = prod(UI.cookPid) && !prod(UI.cookPid).off ? prod(UI.cookPid) : prods[0]; UI.cookPid = p.id;
+  const sel = `<select name="pid" data-chg="cookPick">${prods.map(x => `<option value="${x.id}" ${x.id === p.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>`;
+  const hist = S.entries.filter(e => !e.voided && e.ev && (e.ev.kind === 'cook' || e.ev.kind === 'stockin')).sort((a, b) => b.ts - a.ts).slice(0, 8);
+  const form = p.kind === 'resell'
+    ? `<form data-submit="cook" data-live="cook" class="stack"><div class="two">${fld('Item', sel)}${fld(`How many ${plural(p.unit, 2)} did you buy?`, numIn('units', '', 'required'))}</div>
+      <div class="two">${fld('Total paid (K)', numIn('cost', '', 'required'))}${fld('Date', `<input name="date" type="date" value="${today()}" required>`)}</div>
+      ${fld('Paid with', radios('method', PAY3, 'cash'))}<div data-when="method=credit">${fld('Supplier', '<input name="supplier" list="suppliers" autocomplete="off">')}</div>
+      <div id="cookPrev" class="prev"></div><button class="btn primary" type="submit">Add to stock</button></form>`
+    : `<form data-submit="cook" data-live="cook" class="stack"><div class="two">${fld('What did you cook?', sel)}${fld(`How many ${plural(p.unit, 2)} did you get?`, numIn('units', p.yield, 'required'), `One batch of your recipe makes ${fmtN(p.yield)}.`)}</div>
+      <div class="quickb"><span>Quick fill:</span><button type="button" class="btn ghost sm" data-a="batch" data-f="0.5">Half batch</button><button type="button" class="btn ghost sm" data-a="batch" data-f="1">1 batch</button><button type="button" class="btn ghost sm" data-a="batch" data-f="2">2 batches</button></div>
+      ${fld('Date', `<input name="date" type="date" value="${today()}" required>`)}
+      <div id="cookPrev" class="prev"></div><button class="btn primary" type="submit">Add to ready-to-sell stock</button></form>`;
+  return `<div class="grid2 top"><section class="card"><div class="card-h"><h2>${p.kind === 'resell' ? 'Stock in' : 'Log what you cooked'}</h2></div>${form}</section>
+  <section class="card"><div class="card-h"><h2>Recent batches</h2></div>${hist.length ? hist.map(e => `<div class="hrow"><div><b>${esc(e.memo)}</b><small>${fmtD(e.date)}${e.ev.kind === 'cook' ? ` · <span class="owner-only">${money(e.ev.total / e.ev.units)} each</span>` : ''}</small></div><button class="btn ghost sm" data-a="void" data-id="${e.id}">${ic('undo')} Undo</button></div>`).join('') : `<p class="para muted">Nothing logged yet.</p>`}</section></div>
+  <datalist id="suppliers">${partyBalances('2000').map(d => `<option value="${esc(d.party)}">`).join('')}</datalist>`;
+}
+LIVE.cook = f => {
+  const p = prod(f.pid.value), el = $('#cookPrev', f), units = parseFloat(f.units.value) || 0; if (!p || !el) return;
+  if (p.kind === 'resell') { const c = parseFloat(f.cost.value) || 0; el.innerHTML = units && c ? `<div class="sum owner-only"><div><span>Cost per ${esc(p.unit)}</span><b>${money(c / units)}</b></div><div><span>You sell at</span><b>${money(p.price)} ${chip(pct(marginOf(p.price, c / units)) + ' margin', marginOf(p.price, c / units) >= S.target ? 'good' : 'warn')}</b></div></div>` : ''; return; }
+  const c = recipeCalc(p, units); if (!units) { el.innerHTML = ''; return; }
+  const m = marginOf(p.price, c.per), sug = nicePrice(c.per / (1 - S.target / 100));
+  const warns = stockWarn(c);
+  el.innerHTML = `<div class="tscroll"><table class="tbl mini"><thead><tr><th>Ingredient used</th><th class="r">Needed</th><th class="r">In stock</th><th class="r owner-only">Cost</th></tr></thead><tbody>${c.lines.map(l => `<tr class="${l.short ? 'short' : ''}"><td>${esc(l.name)}</td><td class="r num">${fmtN(l.disp)} ${esc(l.u)}</td><td class="r num">${stockLabel(l.i)}</td><td class="r num owner-only">${money(l.c)}</td></tr>`).join('')}${c.over ? `<tr class="owner-only"><td colspan="3">Gas, fuel and labour for this batch</td><td class="r num">${money(c.over)}</td></tr>` : ''}</tbody></table></div>
+  ${warns.length ? `<div class="alert warn">${ic('warn')}<span>Not enough in stock: ${warns.join('; ')}. You can still log it, then record the purchase you missed.</span></div>` : ''}
+  <div class="sum owner-only"><div><span>Total cost</span><b>${money(c.total)}</b></div><div><span>Cost per ${esc(p.unit)}</span><b>${money(c.per)}</b></div><div><span>You sell at</span><b>${money(p.price)} ${chip(pct(m) + ' margin', m >= S.target ? 'good' : m > 0 ? 'warn' : 'bad')}</b></div>${m < S.target ? `<div><span>To earn ${S.target}% charge</span><b>${money(sug)}</b></div>` : ''}</div>`;
+};
+CHG.cookPick = el => { UI.cookPid = el.value; render(); };
+ACT.batch = el => { const p = prod(UI.cookPid), f = el.closest('form'); f.units.value = r2(p.yield * +el.dataset.f); runLive(f); };
+SUB.cook = (fd) => {
+  const p = prod(fd.get('pid')), units = parseFloat(fd.get('units')) || 0, date = fd.get('date') || today();
+  if (!p || units <= 0) return toast('Enter how many you got', 'bad');
+  if (p.kind === 'resell') {
+    const cost = parseFloat(fd.get('cost')) || 0, method = fd.get('method'), sup = (fd.get('supplier') || '').trim();
+    if (cost <= 0) return toast('Enter the total you paid', 'bad'); if (method === 'credit' && !sup) return toast('Enter the supplier name', 'bad');
+    stockIn({ pid: p.id, units, cost, method, supplier: sup, date }); toast(`Added ${fmtN(units)} ${plural(p.unit, units)} to stock`);
+  } else {
+    const c = recipeCalc(p, units); if (!c.lines.length) return toast('This recipe has no ingredients yet. Edit the recipe first.', 'bad');
+    const short = c.lines.filter(l => l.short).length; cook({ pid: p.id, units, date });
+    toast(`Logged. Each ${p.unit} cost ${isOwner() ? money(c.per) : 'recorded'}.` + (short ? ' Some stock went below zero.' : ''), short ? 'warn' : '');
+  }
+  commit();
+};
+
+function kRecipes() {
+  const prods = S.prods;
+  const guide = `<details class="card guide" ${prods.length > 5 ? '' : 'open'}><summary>How costing works for rice, stews, pizza and cakes</summary><div class="guide-body">
+  <div><b>Things you can count</b><p>Donuts, pizzas, cake slices. Set <em>Batch makes</em> to how many one batch gives, for example 24 donuts. Cost per piece is batch cost divided by 24.</p></div>
+  <div><b>Rice and stews</b><p>Pick a portion, like a plate or a cup. Cook one pot and count how many portions it fills. Enter that as <em>Batch makes</em>. Cost per plate is the pot cost divided by the plates. Add the gas or firewood for the pot too.</p></div>
+  <div><b>Leftovers are a cost</b><p>When a pot is not all sold, write the rest off in Leftovers. The cost shows in your books as waste, so you see the real profit.</p></div>
+  <div><b>Cups and tins</b><p>If you measure rice by the cup, set “1 cup = 190 g” on the ingredient and use cups in the recipe.</p></div></div></details>`;
+  const cards = prods.map(p => {
+    const c = recipeUnitCost(p), m = marginOf(p.price, c);
+    return `<article class="rcard ${p.off ? 'off' : ''}"><div class="rtop"><div><h3>${esc(p.name)}</h3><small>${esc(p.cat || 'Other')} · ${KIND[p.kind]}</small></div><button class="btn ghost sm" data-a="editProd" data-id="${p.id}">${ic('edit')} Edit</button></div>
+    <dl class="kv"><div><dt>${p.kind === 'resell' ? 'Bought per' : 'Batch makes'}</dt><dd>${p.kind === 'resell' ? '1 ' + esc(p.unit) : fmtN(p.yield) + ' ' + esc(plural(p.unit, p.yield))}</dd></div><div><dt>Cost each</dt><dd>${c ? money(c) : 'Not known yet'}</dd></div><div><dt>Price</dt><dd>${money(p.price)}</dd></div><div><dt>Margin</dt><dd>${c ? chip(pct(m), m >= S.target ? 'good' : m > 0 ? 'warn' : 'bad') : '–'}</dd></div></dl>${p.off ? chip('Hidden from menu') : ''}</article>`;
+  }).join('');
+  return guide + (prods.length ? `<div class="rgrid">${cards}</div>` : empty('No recipes yet', 'Add your first recipe to start costing.', `<button class="btn primary" data-a="newProd">Add a recipe</button>`));
+}
+function kWaste() {
+  const ready = S.prods.filter(p => p.pqty > 0.0001);
+  const hist = S.entries.filter(e => !e.voided && e.ev && e.ev.kind === 'waste').sort((a, b) => b.ts - a.ts).slice(0, 8);
+  const reasons = ['Leftover', 'Spoiled', 'Dropped or burnt', 'Staff meal', 'Free sample'];
+  return `<div class="grid2 top"><section class="card"><div class="card-h"><h2>Unsold food</h2></div><p class="para muted">Enter how many are left. They leave your stock and the cost shows as waste.</p>
+  ${ready.length ? ready.map(p => `<form class="wrow" data-submit="wasteP"><input type="hidden" name="id" value="${p.id}"><div class="wn"><b>${esc(p.name)}</b><small>${fmtN(p.pqty, 1)} ${esc(plural(p.unit, p.pqty))} in stock</small></div>${numIn('q', '', `placeholder="How many" max="${p.pqty}" required aria-label="Quantity left of ${esc(p.name)}"`)}<select name="reason" aria-label="Reason">${reasons.map(r => `<option>${r}</option>`).join('')}</select><button class="btn sm" type="submit">Write off</button></form>`).join('') : `<p class="para">No cooked food in stock.</p>`}</section>
+  <section class="card"><div class="card-h"><h2>Spoiled ingredient</h2></div>
+  <form data-submit="wasteI" class="stack">${fld('Ingredient', `<select name="id" data-chg="ingUnit">${S.ings.filter(i => !i.off).map(i => `<option value="${i.id}">${esc(i.name)} (${stockLabel(i)})</option>`).join('')}</select>`)}<div class="two">${fld('Amount', numIn('q', '', 'required'))}${fld('Unit', `<select name="u">${S.ings.filter(i => !i.off)[0] ? unitOpts(S.ings.filter(i => !i.off)[0], S.ings.filter(i => !i.off)[0].unit) : ''}</select>`)}</div>${fld('Reason', `<select name="reason">${['Spoiled', 'Spilled', 'Expired', 'Stolen or lost'].map(r => `<option>${r}</option>`).join('')}</select>`)}<button class="btn" type="submit">Write off</button></form>
+  <div class="card-h sp"><h2>Recent write-offs</h2></div>${hist.length ? hist.map(e => `<div class="hrow"><div><b>${esc(e.memo)}</b><small>${fmtD(e.date)} · <span class="owner-only">${money(e.ev.c)}</span></small></div><button class="btn ghost sm" data-a="void" data-id="${e.id}">${ic('undo')} Undo</button></div>`).join('') : `<p class="para muted">None yet.</p>`}</section></div>`;
+}
+SUB.wasteP = (fd) => { const p = prod(fd.get('id')), q = parseFloat(fd.get('q')) || 0; if (!p || q <= 0) return toast('Enter how many', 'bad'); writeOff({ t: 'p', id: p.id, q: Math.min(q, p.pqty), reason: fd.get('reason'), date: today() }); toast('Written off'); commit(); };
+SUB.wasteI = (fd) => { const i = ing(fd.get('id')), q = parseFloat(fd.get('q')) || 0; if (!i || q <= 0) return toast('Enter an amount', 'bad'); writeOff({ t: 'i', id: i.id, q: toBase(i, q, fd.get('u') || i.unit), reason: fd.get('reason'), date: today() }); toast('Written off'); commit(); };
+/* ============ STOCK ============ */
+V.stock = function () {
+  const ings = S.ings.filter(i => !i.off || Math.abs(i.qty) > 1e-9);
+  const ready = S.prods.filter(p => !p.off || Math.abs(p.pqty) > 1e-9);
+  const buys = S.entries.filter(e => !e.voided && e.ev && (e.ev.kind === 'buy')).sort((a, b) => b.ts - a.ts).slice(0, 8);
+  const tIng = r2(S.ings.reduce((s, i) => s + i.value, 0)), tRdy = r2(S.prods.reduce((s, p) => s + p.pvalue, 0));
+  const st = i => i.qty < -1e-9 ? chip('Below zero', 'bad') : i.low > 0 && i.qty <= i.low ? chip('Low', 'warn') : chip('OK', 'good');
+  return `${head('Stock', `<button type="button" class="btn sm" data-a="newIng">${ic('plus')} New ingredient</button><button type="button" class="btn primary sm" data-a="buy">Buy ingredients</button>`)}
+  <section class="card"><div class="card-h"><h2>Ingredients</h2><span class="muted owner-only">Worth ${money(tIng)}</span></div>
+  ${ings.length ? `<div class="tscroll"><table class="tbl"><thead><tr><th>Ingredient</th><th class="r">On hand</th><th class="r owner-only">Cost per unit</th><th class="r owner-only">Value</th><th>Status</th><th></th></tr></thead><tbody>${ings.map(i => `<tr class="${i.off ? 'off' : ''}"><td><b>${esc(i.name)}</b></td><td class="r num">${stockLabel(i)}</td><td class="r num owner-only">${money(ucost(i) * unitMult(i, i.unit))} / ${esc(i.unit)}</td><td class="r num owner-only">${money(i.value)}</td><td>${st(i)}</td><td class="r"><button class="icon-btn" data-a="editIng" data-id="${i.id}" aria-label="Edit ${esc(i.name)}">${ic('edit')}</button></td></tr>`).join('')}</tbody></table></div>` : empty('No ingredients yet', 'Add the things you buy to cook. Cost per kg or litre is worked out from what you pay.', `<button class="btn primary" data-a="newIng">Add an ingredient</button>`)}</section>
+  <div class="grid2 top"><section class="card"><div class="card-h"><h2>Ready to sell</h2><span class="muted owner-only">Worth ${money(tRdy)}</span></div>
+  ${ready.length ? `<div class="tscroll"><table class="tbl"><thead><tr><th>Item</th><th class="r">In stock</th><th class="r owner-only">Cost each</th><th class="r owner-only">Value</th></tr></thead><tbody>${ready.map(p => `<tr><td><b>${esc(p.name)}</b></td><td class="r num">${fmtN(p.pqty, 1)} ${esc(plural(p.unit, p.pqty))}</td><td class="r num owner-only">${money(ucostP(p))}</td><td class="r num owner-only">${money(p.pvalue)}</td></tr>`).join('')}</tbody></table></div>` : `<p class="para muted">Cooked food appears here after you log a batch.</p>`}</section>
+  <section class="card"><div class="card-h"><h2>Recent purchases</h2></div>${buys.length ? buys.map(e => `<div class="hrow"><div><b>${esc(e.memo)}</b><small>${fmtD(e.date)} · ${money(e.ev.cost)}</small></div><button class="btn ghost sm" data-a="void" data-id="${e.id}">${ic('undo')} Undo</button></div>`).join('') : `<p class="para muted">No purchases yet.</p>`}</section></div>`;
+};
+CHG.ingUnit = el => {
+  const i = ing(el.value), f = el.closest('form'), row = el.closest('.rrow');
+  const u = row ? $('[name=ru]', row) : $('[name=u]', f); if (!u) return;
+  u.innerHTML = i ? unitOpts(i, i.unit) : '<option></option>';
+};
+function openIng(id) {
+  const i = id ? ing(id) : null; const fam = i ? i.fam : 'w';
+  const us = f => FAM[f].units.map(u => `<option ${i && i.fam === f && i.unit === u ? 'selected' : ''}>${u}</option>`).join('');
+  const lowShown = i && i.low ? fromBase(i, i.low, i.unit) : '';
+  openSheet(i ? 'Edit ingredient' : 'New ingredient', `<form data-submit="ing" class="stack"><input type="hidden" name="id" value="${i ? i.id : ''}">
+    ${fld('Name', `<input name="name" required value="${esc(i ? i.name : '')}" placeholder="Flour, rice, cooking oil…">`)}
+    ${i ? `<input type="hidden" name="fam" value="${fam}"><p class="para muted">Measured by: ${FAM[fam].label}</p>` : fld('How do you measure it?', radios('fam', [['w', 'Weight'], ['v', 'Liquid'], ['c', 'Count']], 'w'))}
+    <div class="two">${fld('Show stock in', `<span data-when="fam=w"><select name="uw">${us('w')}</select></span><span data-when="fam=v"><select name="uv">${us('v')}</select></span><span data-when="fam=c"><select name="uc">${us('c')}</select></span>`)}
+    ${fld('Warn me when below', numIn('low', lowShown ? fmtN(lowShown, 3) : '', 'placeholder="Optional"'), 'In the unit on the left.')}</div>
+    <div class="card inset"><div class="lbl">Your own measure (optional)</div><p class="para muted">If you measure rice by the cup or sugar by the tin, tell the system how much that is.</p>
+    <div class="two">${fld('Name of measure', `<input name="cname" placeholder="cup, tin, scoop" value="${esc(i && i.custom ? i.custom.name : '')}">`)}${fld('1 of them equals', `<span class="inl">${numIn('cbase', i && i.custom ? i.custom.base : '', 'placeholder="e.g. 190"')}<span class="muted"><span data-when="fam=w">g</span><span data-when="fam=v">ml</span><span data-when="fam=c">pieces</span></span></span>`)}</div></div>
+    ${i ? `<label class="chk"><input type="checkbox" name="off" ${i.off ? 'checked' : ''}> Hide this ingredient (stops showing in lists)</label>` : ''}
+    <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save ingredient</button></div></form>`);
+}
+SUB.ing = (fd) => {
+  const name = (fd.get('name') || '').trim(); if (!name) return toast('Enter a name', 'bad');
+  const fam = fd.get('fam'), unit = fd.get('u' + fam), cname = (fd.get('cname') || '').trim(), cbase = parseFloat(fd.get('cbase')) || 0;
+  const custom = cname && cbase > 0 ? { name: cname, base: cbase } : null;
+  let i = fd.get('id') ? ing(fd.get('id')) : null;
+  if (!i) { i = { id: uid(), name, fam, unit, custom, qty: 0, value: 0, lastCost: 0, low: 0, off: false }; S.ings.push(i); }
+  else Object.assign(i, { name, unit, custom, off: !!fd.get('off') });
+  const low = parseFloat(fd.get('low')) || 0; i.low = low > 0 ? toBase(i, low, i.unit) : 0;
+  closeModal(); commit(); toast('Ingredient saved');
+};
+function openBuy(id) {
+  const list = S.ings.filter(i => !i.off); if (!list.length) return openIng();
+  const i = ing(id) && !ing(id).off ? ing(id) : list[0];
+  openSheet('Buy ingredients', `<form data-submit="buy" data-live="buy" class="stack">
+    ${fld('Ingredient', `<select name="ing" data-chg="ingUnit">${list.map(x => `<option value="${x.id}" ${x.id === i.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>`)}
+    <div class="two">${fld('How much did you buy?', numIn('q', '', 'required'))}${fld('Unit', `<select name="u">${unitOpts(i, i.unit)}</select>`)}</div>
+    ${fld('Total you paid (K)', numIn('cost', '', 'required'))}<div id="buyPrev" class="prev"></div>
+    ${fld('Paid with', radios('method', PAY3, 'cash'))}
+    <div data-when="method=credit">${fld('Supplier', '<input name="supplier" list="suppliers" autocomplete="off" placeholder="Who do you owe?">')}</div>
+    ${fld('Date', `<input name="date" type="date" value="${today()}" required>`)}
+    <datalist id="suppliers">${partyBalances('2000').map(d => `<option value="${esc(d.party)}">`).join('')}</datalist>
+    <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save purchase</button></div></form>`);
+}
+LIVE.buy = f => {
+  const i = ing(f.ing.value), q = parseFloat(f.q.value) || 0, c = parseFloat(f.cost.value) || 0, el = $('#buyPrev', f); if (!i || !q || !c) { el.innerHTML = ''; return; }
+  const per = c / q, last = i.lastCost * unitMult(i, f.u.value), d = last ? (per - last) / last * 100 : 0;
+  el.innerHTML = `<div class="sum"><div><span>Cost per ${esc(f.u.value)}</span><b>${money(per)}</b></div>${last ? `<div><span>Last time</span><b>${money(last)} ${Math.abs(d) >= 1 ? chip((d > 0 ? 'Up ' : 'Down ') + pct(Math.abs(d)), d > 0 ? 'warn' : 'good') : ''}</b></div>` : ''}</div>`;
+};
+SUB.buy = (fd) => {
+  const i = ing(fd.get('ing')), q = parseFloat(fd.get('q')) || 0, cost = parseFloat(fd.get('cost')) || 0, method = fd.get('method'), sup = (fd.get('supplier') || '').trim();
+  if (!i || q <= 0 || cost <= 0) return toast('Enter the amount and what you paid', 'bad'); if (method === 'credit' && !sup) return toast('Enter the supplier name', 'bad');
+  buyIng({ id: i.id, q, u: fd.get('u'), cost, method, supplier: sup, date: fd.get('date') || today() }); closeModal(); commit(); toast('Purchase saved');
+};
+ACT.buy = el => openBuy(el.dataset.id); ACT.newIng = () => openIng(); ACT.editIng = el => openIng(el.dataset.id);
+
+/* ============ RECIPE FORM ============ */
+const UNIT_SUG = ['piece', 'slice', 'plate', 'cup', 'serve', 'bowl', 'bottle', 'pizza', 'loaf', 'pack'];
+function openProd(id) {
+  const p = id ? prod(id) : null, kind = p ? p.kind : 'count';
+  const cats = [...new Set(['Bakery', 'Meals', 'Snacks', 'Drinks', ...S.prods.map(x => x.cat).filter(Boolean)])];
+  const rows = p && p.recipe.length ? p.recipe : [{}, {}];
+  openSheet(p ? 'Edit recipe' : 'New recipe', `<form data-submit="prod" data-live="prod" class="stack"><input type="hidden" name="id" value="${p ? p.id : ''}">
+    <div class="two">${fld('Name', `<input name="name" required value="${esc(p ? p.name : '')}" placeholder="Donut, Rice, Chicken stew…">`)}${fld('Group on menu', `<input name="cat" list="cats" value="${esc(p ? p.cat : '')}" placeholder="Bakery, Meals…"><datalist id="cats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist>`)}</div>
+    ${fld('What kind of item is it?', radios('kind', [['count', 'Counted'], ['portion', 'Portion'], ['resell', 'Bought to resell']], kind), 'Counted: donuts, pizza. Portion: rice, stew, soup. Resell: soft drinks you buy ready made.')}
+    <div class="two">${fld('Sold by the', `<input name="unit" list="units" required value="${esc(p ? p.unit : 'piece')}"><datalist id="units">${UNIT_SUG.map(u => `<option value="${u}">`).join('')}</datalist>`, 'piece, plate, cup, slice…')}
+    <div data-when="kind=count|portion">${fld('One batch makes', numIn('yield', p ? p.yield : '', 'required'), 'How many you get from the recipe below.')}</div></div>
+    <div data-when="kind=count|portion">${rowsBlock(rows)}${fld('Gas, firewood or labour per batch (K)', numIn('over', p ? p.over || '' : '', 'placeholder="0"'), 'Optional. Add what one batch costs you to cook.')}</div>
+    <div class="two">${fld('Selling price each (K)', numIn('price', p ? p.price : '', 'required'))}<div data-when="kind=resell">${fld('Usual buying cost each (K)', numIn('lastCost', p && p.kind === 'resell' ? p.lastCost || '' : '', 'placeholder="Optional"'))}</div></div>
+    <div id="prodPrev" class="prev owner-only"></div>
+    ${p ? `<label class="chk"><input type="checkbox" name="off" ${p.off ? 'checked' : ''}> Hide from the menu</label>` : ''}
+    <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save recipe</button></div></form>`, { wide: true });
+}
+LIVE.prod = f => {
+  const el = $('#prodPrev', f), kind = new FormData(f).get('kind'); if (kind === 'resell') { el.innerHTML = ''; return; }
+  const yld = parseFloat(f.yield.value) || 0, price = parseFloat(f.price.value) || 0, unit = f.unit.value || 'piece';
+  const c = recipeCalc({ recipe: readRows(f), yield: yld, over: parseFloat(f.over.value) || 0 }, yld); if (!yld || !c.lines.length) { el.innerHTML = '<p class="para muted">Add the ingredients and how many one batch makes to see the cost of each.</p>'; return; }
+  const m = marginOf(price, c.per), sug = nicePrice(c.per / (1 - S.target / 100));
+  el.innerHTML = `<div class="sum"><div><span>Cost of one batch</span><b>${money(c.total)}</b></div><div><span>Cost per ${esc(unit)}</span><b>${money(c.per)}</b></div><div><span>Margin at your price</span><b>${price ? chip(pct(m), m >= S.target ? 'good' : m > 0 ? 'warn' : 'bad') : '–'}</b></div><div><span>For ${S.target}% margin charge</span><b>${money(sug)} <button type="button" class="btn ghost sm" data-a="useSug" data-v="${sug}">Use</button></b></div></div>${c.lines.some(l => !l.i.lastCost && !l.i.value) ? `<p class="para warnt">Some ingredients have no price yet. Record a purchase for them so the cost is real.</p>` : ''}`;
+};
+ACT.useSug = el => { const f = el.closest('form'); f.price.value = el.dataset.v; runLive(f); };
+SUB.prod = (fd, f) => {
+  const kind = fd.get('kind'), name = (fd.get('name') || '').trim(), yld = parseFloat(fd.get('yield')) || 0, price = parseFloat(fd.get('price'));
+  if (!name) return toast('Enter a name', 'bad'); if (isNaN(price)) return toast('Enter a selling price', 'bad');
+  const rows = kind === 'resell' ? [] : readRows(f); if (kind !== 'resell' && (yld <= 0 || !rows.length)) return toast('Add at least one ingredient and how many a batch makes', 'bad');
+  let p = fd.get('id') ? prod(fd.get('id')) : null;
+  const data = { name, cat: (fd.get('cat') || '').trim() || 'Other', kind, unit: (fd.get('unit') || 'piece').trim(), yield: kind === 'resell' ? 1 : yld, over: kind === 'resell' ? 0 : parseFloat(fd.get('over')) || 0, price, recipe: rows.map(r => ({ ing: r.ing, q: r.q, u: r.u })) };
+  if (!p) { p = { id: uid(), pqty: 0, pvalue: 0, lastCost: 0, off: false, ...data }; S.prods.push(p); } else Object.assign(p, data, { off: !!fd.get('off') });
+  if (kind === 'resell' && !p.pqty) p.lastCost = parseFloat(fd.get('lastCost')) || p.lastCost || 0;
+  closeModal(); commit(); toast('Recipe saved');
+};
+ACT.newProd = () => openProd(); ACT.editProd = el => openProd(el.dataset.id);
+ACT.rowadd = el => { const list = $('.rows-list', el.closest('[data-rows]')); list.insertAdjacentHTML('beforeend', el.dataset.t === 'ing' ? ingRow({}) : lineRow({})); };
+ACT.rowdel = el => { const row = el.closest('.rrow,.lrow'), f = el.closest('form'); row.remove(); if (f) runLive(f); };
+
+/* ============ ORDERS ============ */
+const lineRow = (l = {}) => `<div class="lrow"><select name="lp" data-chg="lineProd" aria-label="Item"><option value="">Custom item</option>${S.prods.filter(p => !p.off || p.id === l.pid).map(p => `<option value="${p.id}" ${p.id === l.pid ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select><input name="ld" placeholder="Describe the item" value="${esc(l.pid ? '' : l.desc || '')}" ${l.pid ? 'hidden' : ''} aria-label="Description">${numIn('lq', l.qty ?? 1, 'aria-label="Quantity"')}${numIn('lpr', l.price ?? '', 'placeholder="Price each" aria-label="Price each"')}<button type="button" class="icon-btn" data-a="rowdel" aria-label="Remove line">${ic('x')}</button></div>`;
+CHG.lineProd = el => { const row = el.closest('.lrow'), p = prod(el.value); $('[name=ld]', row).hidden = !!p; if (p) $('[name=lpr]', row).value = p.price; runLive(el.closest('form')); };
+function readLines(f) {
+  const lp = $$('[name=lp]', f), ld = $$('[name=ld]', f), lq = $$('[name=lq]', f), lpr = $$('[name=lpr]', f);
+  return lp.map((s, k) => { const p = prod(s.value); return { pid: p ? p.id : '', desc: p ? p.name : ld[k].value.trim(), qty: parseFloat(lq[k].value) || 0, price: parseFloat(lpr[k].value) || 0 }; }).filter(l => l.qty > 0 && (l.pid || l.desc));
+}
+const orderCard = o => {
+  const t = today(), tot = orderTotal(o), paid = orderPaid(o), live = !['delivered', 'cancelled'].includes(o.status);
+  const dd = o.due ? daysBetween(t, o.due) : null, nxt = { booked: 'Start cooking', kitchen: 'Mark ready', ready: 'Hand over' }[o.status];
+  return `<article class="ocard ${o.status}"><button type="button" class="ohead" data-a="order" data-id="${o.id}"><span class="od ${live && dd !== null && dd <= 0 ? 'hot' : ''}"><b>${o.due ? o.due.slice(8) : '–'}</b><small>${o.due ? new Date(o.due + 'T12:00:00').toLocaleDateString('en-GB', { month: 'short' }) : ''}</small></span>
+  <span class="ob"><b>#${o.num} ${esc(o.customer)}</b><small>${o.kind === 'cake' ? 'Cake order' : o.kind === 'catering' ? 'Catering' : 'Order'}${o.due && live ? ' · due ' + relDay(o.due) + (o.time ? ' at ' + fmtT(o.time) : '') : ''}</small><small class="desc">${esc(o.lines.map(l => (l.qty > 1 ? l.qty + ' x ' : '') + l.desc).join(', '))}</small></span>
+  <span class="or">${chip(ORDER_LABEL[o.status], o.status === 'ready' ? 'good' : o.status === 'kitchen' ? 'info' : o.status === 'cancelled' ? 'bad' : o.status === 'delivered' ? '' : 'warn')}<b class="num">${money(tot, 0)}</b><small>${o.status === 'cancelled' ? '' : paid >= tot - 0.004 ? 'Paid in full' : (paid ? money(tot - paid, 0) + ' to pay' : 'No deposit')}</small></span></button>
+  ${live ? `<div class="oact"><button type="button" class="btn sm ${o.status === 'ready' ? 'primary' : ''}" data-a="${o.status === 'ready' ? 'deliver' : 'advance'}" data-id="${o.id}">${nxt}</button></div>` : ''}</article>`;
+};
+V.orders = function () {
+  const f = UI.of, items = S.orders.filter(o => f === 'all' || (f === 'open' && !['delivered', 'cancelled'].includes(o.status)) || (f === 'done' && o.status === 'delivered') || (f === 'cancelled' && o.status === 'cancelled'))
+    .sort((a, b) => f === 'open' ? ((a.due || '9') + (a.time || '')).localeCompare((b.due || '9') + (b.time || '')) : ((b.due || '') + (b.time || '')).localeCompare((a.due || '') + (a.time || '')));
+  const counts = { open: S.orders.filter(o => !['delivered', 'cancelled'].includes(o.status)).length, done: S.orders.filter(o => o.status === 'delivered').length };
+  return `${head('Orders', `<button type="button" class="btn primary sm" data-a="newOrder">${ic('plus')} New order</button>`)}
+  <div class="tabs scroll">${[['open', `Open (${counts.open})`], ['done', `Delivered (${counts.done})`], ['cancelled', 'Cancelled'], ['all', 'All']].map(([v, l]) => `<button type="button" class="tab" data-a="ofilter" data-v="${v}" aria-pressed="${f === v}">${l}</button>`).join('')}</div>
+  ${items.length ? `<div class="ogrid">${items.map(orderCard).join('')}</div>` : empty(f === 'open' ? 'No open orders' : 'Nothing here', 'Take cake and catering orders here. Deposits are kept as customer money until you deliver, then they count as sales.', `<button class="btn primary" data-a="newOrder">Add an order</button>`)}`;
+};
+ACT.ofilter = el => { UI.of = el.dataset.v; render(); };
+function openOrderForm(id) {
+  const o = id ? ord(id) : null;
+  const lines = o ? o.lines : [{ qty: 1 }], bom = o && o.bom.length ? o.bom : [{}];
+  openSheet(o ? `Edit order #${o.num}` : 'New order', `<form data-submit="order" data-live="order" class="stack"><input type="hidden" name="id" value="${o ? o.id : ''}">
+    ${fld('Order type', radios('kind', [['cake', 'Cake'], ['catering', 'Catering'], ['other', 'Other']], o ? o.kind : 'cake'))}
+    <div class="two">${fld('Customer', `<input name="customer" required value="${esc(o ? o.customer : '')}" placeholder="Name">`)}${fld('Phone', `<input name="phone" inputmode="tel" value="${esc(o ? o.phone : '')}" placeholder="Optional">`)}</div>
+    <div class="two">${fld('Needed on', `<input name="due" type="date" value="${o ? o.due : addDays(today(), 3)}" required>`)}${fld('Time', `<input name="time" type="time" value="${o ? o.time : ''}">`)}</div>
+    ${fld('Details', `<textarea name="notes" rows="2" placeholder="Flavour, size, message on cake. For catering: event, number of guests, menu.">${esc(o ? o.notes : '')}</textarea>`)}
+    <div class="rows" data-rows="line"><div class="lbl">What the customer is buying</div><div class="rows-list">${lines.map(lineRow).join('')}</div><button type="button" class="btn ghost sm" data-a="rowadd" data-t="line">${ic('plus')} Add line</button><small class="muted">For catering, put the number of guests as the quantity and your price per head.</small></div>
+    <div class="card inset owner-only"><div class="lbl">What it costs you to make (optional)</div><p class="para muted">List the ingredients you will use. They come out of stock when you deliver.</p>${rowsBlock(bom, 'Ingredients used')}${fld('Other costs: decorations, transport, hired help (K)', numIn('extra', o ? o.extra || '' : '', 'placeholder="0"'))}</div>
+    <div id="orderPrev" class="prev"></div>
+    ${o ? '' : `<div class="card inset"><div class="lbl">Deposit</div><div class="two">${fld('Paid now (K)', numIn('dep', '', 'placeholder="0"'))}${fld('Paid with', radios('dmethod', PAY2, 'cash'))}</div></div>`}
+    <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">${o ? 'Save changes' : 'Save order'}</button></div></form>`, { wide: true });
+}
+LIVE.order = f => {
+  const lines = readLines(f), tmp = { lines, bom: readRows(f), extra: parseFloat(f.extra ? f.extra.value : 0) || 0 }, tot = orderTotal(tmp), c = orderCost(tmp), el = $('#orderPrev', f);
+  if (!tot) { el.innerHTML = ''; return; }
+  const profit = r2(tot - c.total), m = marginOf(tot, c.total), sug = Math.ceil(c.total / (1 - S.target / 100));
+  el.innerHTML = `<div class="sum"><div><span>Order total</span><b>${money(tot)}</b></div>${c.total ? `<div class="owner-only"><span>Your cost</span><b>${money(c.total)}</b></div><div class="owner-only"><span>Profit</span><b>${money(profit)} ${chip(pct(m), m >= S.target ? 'good' : m > 0 ? 'warn' : 'bad')}</b></div>${m < S.target ? `<div class="owner-only"><span>For ${S.target}% margin charge</span><b>${money(sug)}</b></div>` : ''}` : ''}</div>`;
+};
+SUB.order = (fd, f) => {
+  const lines = readLines(f); if (!lines.length) return toast('Add what the customer is buying', 'bad');
+  const d = { kind: fd.get('kind'), customer: fd.get('customer').trim(), phone: fd.get('phone').trim(), due: fd.get('due'), time: fd.get('time'), notes: fd.get('notes').trim(), lines, bom: readRows(f).map(r => ({ ing: r.ing, q: r.q, u: r.u })), extra: parseFloat(fd.get('extra')) || 0 };
+  if (!d.customer) return toast('Enter the customer name', 'bad');
+  if (fd.get('id')) Object.assign(ord(fd.get('id')), d);
+  else { const o = newOrder(d), dep = parseFloat(fd.get('dep')) || 0; if (dep > 0) payOrder(o, dep, fd.get('dmethod'), today()); }
+  closeModal(); commit(); toast('Order saved');
+};
+ACT.newOrder = () => openOrderForm(); ACT.editOrder = el => openOrderForm(el.dataset.id);
+ACT.advance = el => { const o = ord(el.dataset.id), k = ORDER_FLOW.indexOf(o.status); if (k >= 0 && k < 2) o.status = ORDER_FLOW[k + 1]; commit(); };
+function openOrder(id) {
+  const o = ord(id), tot = orderTotal(o), paid = orderPaid(o), bal = r2(tot - paid), live = !['delivered', 'cancelled'].includes(o.status), c = orderCost(o), pf = o.status === 'delivered' ? r2(o.price - o.cost) : r2(tot - c.total);
+  const steps = ORDER_FLOW.map((s, k) => `<li class="${ORDER_FLOW.indexOf(o.status) >= k && o.status !== 'cancelled' ? 'on' : ''}">${ORDER_LABEL[s]}</li>`).join('');
+  openSheet(`Order #${o.num}`, `<div class="ostat">${o.status === 'cancelled' ? chip('Cancelled', 'bad') : `<ol class="steps">${steps}</ol>`}</div>
+  <div class="odet"><h3>${esc(o.customer)} ${o.phone ? `<small class="muted">${esc(o.phone)}</small>` : ''}</h3><p class="para">${o.kind === 'cake' ? 'Cake order' : o.kind === 'catering' ? 'Catering' : 'Order'} · ${fmtD(o.due)}${o.time ? ' at ' + fmtT(o.time) : ''}${live ? ' (' + relDay(o.due) + ')' : ''}</p>${o.notes ? `<p class="para note">${esc(o.notes)}</p>` : ''}</div>
+  <div class="tscroll"><table class="tbl mini"><tbody>${o.lines.map(l => `<tr><td>${esc(l.desc)}</td><td class="r num">${fmtN(l.qty)} x ${money(l.price)}</td><td class="r num">${money(l.qty * l.price)}</td></tr>`).join('')}<tr class="tot"><td colspan="2">Total</td><td class="r num">${money(tot)}</td></tr><tr><td colspan="2">Paid so far</td><td class="r num">${money(paid)}</td></tr><tr class="tot"><td colspan="2">Balance</td><td class="r num">${money(bal)}</td></tr></tbody></table></div>
+  ${(c.total || o.status === 'delivered') ? `<div class="sum owner-only"><div><span>${o.status === 'delivered' ? 'Actual cost' : 'Estimated cost'}</span><b>${money(o.status === 'delivered' ? o.cost : c.total)}</b></div><div><span>Profit</span><b>${money(pf)} ${chip(pct(marginOf(o.status === 'delivered' ? o.price : tot, o.status === 'delivered' ? o.cost : c.total)), 'info')}</b></div></div>` : ''}
+  ${o.payments.length ? `<div class="lbl">Payments</div>${o.payments.map(p => `<div class="hrow"><div><b>${money(p.amt)} ${p.after ? 'balance' : 'deposit'}</b><small>${fmtD(p.date)} · ${p.method === 'cash' ? 'Cash' : 'Mobile money'}</small></div><button class="btn ghost sm" data-a="void" data-id="${p.eid}" data-back="${o.id}">${ic('undo')} Undo</button></div>`).join('')}` : ''}
+  ${o.status !== 'cancelled' && bal > 0.004 ? `<form class="payin" data-submit="orderPay"><input type="hidden" name="id" value="${o.id}"><div class="lbl">${o.status === 'delivered' ? 'Collect the balance' : 'Take a payment'}</div><div class="inl">${numIn('amt', bal, 'required aria-label="Amount"')}${radios('method', PAY2, 'cash')}<button class="btn sm" type="submit">Record</button></div></form>` : ''}
+  <div class="foot wrap">${live ? `<button type="button" class="btn ghost" data-a="editOrder" data-id="${o.id}">${ic('edit')} Edit</button><button type="button" class="btn ghost danger-t" data-a="cancelOrder" data-id="${o.id}">Cancel order</button>${o.status !== 'ready' ? `<button type="button" class="btn" data-a="advanceClose" data-id="${o.id}">${o.status === 'booked' ? 'Start cooking' : 'Mark ready'}</button>` : ''}<button type="button" class="btn primary" data-a="deliver" data-id="${o.id}">Deliver</button>` : `<button type="button" class="btn" data-a="close">Close</button>`}</div>`, { kind: 'order' });
+}
+ACT.order = el => openOrder(el.dataset.id);
+ACT.advanceClose = el => { ACT.advance(el); openOrder(el.dataset.id); };
+SUB.orderPay = (fd) => { const o = ord(fd.get('id')), a = parseFloat(fd.get('amt')) || 0; if (a <= 0) return toast('Enter an amount', 'bad'); payOrder(o, a, fd.get('method'), today()); persist(); render(); openOrder(o.id); toast('Payment recorded'); };
+ACT.deliver = el => {
+  const o = ord(el.dataset.id), tot = orderTotal(o), bal = r2(tot - orderPaid(o));
+  const short = [];
+  (o.bom || []).forEach(b => { const i = ing(b.ing); if (i && i.qty < toBase(i, b.q, b.u) - 1e-9) short.push(`${esc(i.name)}: need ${fmtN(b.q)} ${esc(b.u)}, have ${stockLabel(i)}`); });
+  openSheet(`Deliver order #${o.num}`, `<form data-submit="deliver" class="stack"><input type="hidden" name="id" value="${o.id}"><p class="para">${esc(o.customer)} · ${money(tot)}. The sale is counted now and the ingredients come out of stock.</p>
+  ${short.length ? `<div class="alert warn owner-only">${ic('warn')}<span>Stock is short: ${short.join('; ')}.</span></div>` : ''}
+  ${bal > 0.004 ? fld('Collected now (K)', numIn('collect', bal), 'Whatever is not collected stays as money the customer owes you.') + fld('Paid with', radios('method', PAY2, 'cash')) : '<p class="para">Fully paid already.</p>'}
+  <div class="foot"><button type="button" class="btn ghost" data-a="close">Back</button><button class="btn primary" type="submit">Confirm delivery</button></div></form>`);
+};
+SUB.deliver = (fd) => { const o = ord(fd.get('id')); deliverOrder(o, { date: today(), collect: parseFloat(fd.get('collect')) || 0, method: fd.get('method') || 'cash' }); closeModal(); commit(); toast('Order delivered and booked as a sale'); };
+ACT.cancelOrder = el => {
+  const o = ord(el.dataset.id), held = r2(o.payments.filter(p => !p.after).reduce((s, p) => s + p.amt, 0));
+  if (!held) return ask('Cancel this order?', `Order #${o.num} for ${esc(o.customer)} will be cancelled.`, 'Cancel order', () => { cancelOrder(o, true, today()); closeModal(); commit(); }, true);
+  openSheet('Cancel order', `<p class="para">${esc(o.customer)} paid ${money(held)} as a deposit. What happens to it?</p><div class="foot wrap"><button type="button" class="btn ghost" data-a="close">Keep order</button><button type="button" class="btn" data-a="doCancel" data-id="${o.id}" data-r="1">Refund the deposit</button><button type="button" class="btn danger" data-a="doCancel" data-id="${o.id}" data-r="0">Keep the deposit as income</button></div>`);
+};
+ACT.doCancel = el => { cancelOrder(ord(el.dataset.id), el.dataset.r === '1', today()); closeModal(); commit(); toast('Order cancelled'); };
+
+/* ============ VOID ============ */
+ACT.void = el => {
+  const e = S.entries.find(x => x.id === el.dataset.id), back = el.dataset.back;
+  if (!e) return;
+  ask('Undo this entry?', `<b>${esc(e.memo)}</b><br>The books and stock go back as they were. A reversing entry stays in the journal so nothing disappears.`, 'Undo entry', () => { voidEntry(e.id); persist(); closeModal(); render(); if (back) openOrder(back); toast('Entry reversed'); }, true);
+};
+/* ============ BOOKS ============ */
+const BTABS = [['pnl', 'Profit & loss'], ['bs', 'Balance sheet'], ['owed', 'Owed'], ['journal', 'Journal'], ['accts', 'Accounts'], ['sales', 'Sales report']];
+V.books = function () {
+  const s = UI.sub.books, fn = { pnl: bPnl, bs: bBS, owed: bOwed, journal: bJournal, accts: bAccts, sales: bSales }[s];
+  return head('Books', `<button type="button" class="btn primary sm" data-a="record">${ic('plus')} Record</button>`) + tabsRow('books', BTABS, s) + fn();
+};
+function periodBar() {
+  const o = [['today', 'Today'], ['7d', 'Last 7 days'], ['month', 'This month'], ['lastmonth', 'Last month'], ['year', 'This year'], ['all', 'All time'], ['custom', 'Pick dates']];
+  return `<div class="pbar"><select data-chg="period" aria-label="Period">${o.map(([v, l]) => `<option value="${v}" ${UI.period === v ? 'selected' : ''}>${l}</option>`).join('')}</select>${UI.period === 'custom' ? `<input type="date" value="${UI.from}" data-chg="from" aria-label="From"><span>to</span><input type="date" value="${UI.to}" data-chg="to" aria-label="To">` : ''}</div>`;
+}
+CHG.period = el => { UI.period = el.value; if (el.value === 'custom' && !UI.from) { UI.from = addDays(today(), -6); UI.to = today(); } render(); };
+CHG.from = el => { UI.from = el.value; render(); }; CHG.to = el => { UI.to = el.value; render(); };
+function bPnl() {
+  const [f, t] = rangeOf(UI.period), p = pnl(f, t), gm = p.revenue ? p.gross / p.revenue * 100 : 0, nm = p.revenue ? p.net / p.revenue * 100 : 0;
+  const R = (l, v, c = '') => `<tr class="${c}"><td>${l}</td><td class="r num">${money(v)}</td></tr>`;
+  return `${periodBar()}<div class="tiles three"><div class="tile"><span class="tl">Income</span><b class="big">${money(p.revenue)}</b></div><div class="tile"><span class="tl">Net profit</span><b class="big ${p.net < 0 ? 'neg' : ''}">${money(p.net)}</b><span class="ts">${pct(nm)} of income</span></div><div class="tile"><span class="tl">Gross margin</span><b class="big">${pct(gm)}</b><span class="ts">after cost of food</span></div></div>
+  <section class="card"><div class="tscroll"><table class="tbl stmt"><tbody>
+  <tr class="sec"><td colspan="2">Income</td></tr>${p.income.map(x => R(x.name, x.v)).join('') || '<tr><td colspan="2" class="muted">No income in this period</td></tr>'}${R('Total income', p.revenue, 'tot')}
+  <tr class="sec"><td colspan="2">Cost of food sold</td></tr>${R('Ingredients and stock used for what you sold', p.cogs)}${R('Gross profit', p.gross, 'tot')}
+  <tr class="sec"><td colspan="2">Expenses</td></tr>${p.exps.map(x => R(x.name, x.v)).join('') || '<tr><td colspan="2" class="muted">No expenses in this period</td></tr>'}${R('Total expenses', p.expenses, 'tot')}
+  ${R('Net profit', p.net, 'tot grand')}</tbody></table></div></section>`;
+}
+function bBS() {
+  const b = balanceSheet(today()), rc = reconcile(), okI = Math.abs(rc.ingSum - rc.ingBook) < 0.02, okP = Math.abs(rc.prodSum - rc.prodBook) < 0.02;
+  const R = (l, v, c = '') => `<tr class="${c}"><td>${l}</td><td class="r num">${money(v)}</td></tr>`;
+  return `<p class="para muted">As at ${fmtDL(today())}</p><div class="grid2 top"><section class="card"><div class="tscroll"><table class="tbl stmt"><tbody><tr class="sec"><td colspan="2">What the business has</td></tr>${b.A.map(x => R(x.name, x.v)).join('')}${R('Total assets', b.tA, 'tot')}</tbody></table></div></section>
+  <section class="card"><div class="tscroll"><table class="tbl stmt"><tbody><tr class="sec"><td colspan="2">What the business owes</td></tr>${b.L.map(x => R(x.name, x.v)).join('') || R('Nothing owed', 0)}${R('Total owed', b.tL, 'tot')}
+  <tr class="sec"><td colspan="2">Owner's share</td></tr>${b.Q.map(x => R(x.a === '3100' ? 'Less: money you took out' : x.name, x.v)).join('')}${R('Profit kept in the business', b.profit)}${R('Total owner\'s share', b.tQ, 'tot')}${R('Owed plus owner\'s share', r2(b.tL + b.tQ), 'tot grand')}</tbody></table></div></section></div>
+  <div class="checks">${b.ok ? chip('Books balance: assets equal what you owe plus your share', 'good') : chip('Books do not balance. Check the journal.', 'bad')} ${okI && okP ? chip('Stock lists match the books', 'good') : chip('Stock lists differ from the books by ' + money(Math.abs(rc.ingSum - rc.ingBook) + Math.abs(rc.prodSum - rc.prodBook)), 'warn')}</div>`;
+}
+function bOwed() {
+  const ar = partyBalances('1100'), ap = partyBalances('2000'), dep = partyBalances('2100');
+  const list = (arr, btn, none) => arr.length ? arr.map(x => `<div class="hrow"><div><b>${esc(x.party)}</b><small>${money(x.amt)}</small></div><button class="btn sm" data-a="${btn}" data-p="${esc(x.party)}" data-amt="${x.amt}">${btn === 'collect' ? 'Collect' : 'Pay'}</button></div>`).join('') : `<p class="para muted">${none}</p>`;
+  return `<div class="grid2 top"><section class="card"><div class="card-h"><h2>Customers owe you</h2><b class="num">${money(ar.reduce((s, x) => s + x.amt, 0))}</b></div>${list(ar, 'collect', 'Nobody owes you money.')}</section>
+  <section class="card"><div class="card-h"><h2>You owe suppliers</h2><b class="num">${money(ap.reduce((s, x) => s + x.amt, 0))}</b></div>${list(ap, 'paysup', 'You owe nobody.')}</section></div>
+  ${dep.length ? `<section class="card"><div class="card-h"><h2>Deposits you are holding</h2><b class="num">${money(dep.reduce((s, x) => s + x.amt, 0))}</b></div><p class="para muted">Customer money for orders not yet delivered. It becomes income when you deliver.</p>${dep.map(x => `<div class="hrow"><div><b>${esc(x.party)}</b></div><b class="num">${money(x.amt)}</b></div>`).join('')}</section>` : ''}`;
+}
+ACT.collect = el => FORMS.rcv(el.dataset.p, +el.dataset.amt); ACT.paysup = el => FORMS.sup(el.dataset.p, +el.dataset.amt);
+function jlistHTML() {
+  const q = UI.jq.trim().toLowerCase();
+  let list = S.entries.slice().sort((a, b) => b.date.localeCompare(a.date) || b.n - a.n);
+  if (q) list = list.filter(e => (e.memo + ' ' + e.type + ' ' + e.n + ' ' + e.lines.map(l => acctName(l.a) + ' ' + l.party + ' ' + (l.dr || l.cr)).join(' ')).toLowerCase().includes(q));
+  const shown = list.slice(0, UI.jl);
+  return (shown.map(e => `<article class="je ${e.voided ? 'void' : ''} ${e.type === 'reversal' ? 'rev' : ''}"><div class="jh"><b>#${e.n}</b><span>${fmtD(e.date)}</span><span class="memo">${esc(e.memo)}</span>${e.voided ? chip('Reversed') : ''}${canVoid(e) ? `<button class="btn ghost sm" data-a="void" data-id="${e.id}">${ic('undo')} Undo</button>` : ''}</div>
+  <div class="tscroll"><table class="tbl mini"><tbody>${e.lines.map(l => `<tr><td>${l.a} ${esc(acctName(l.a))}${l.party ? ` <small class="muted">· ${esc(l.party)}</small>` : ''}</td><td class="r num">${l.dr ? money(l.dr) : ''}</td><td class="r num">${l.cr ? money(l.cr) : ''}</td></tr>`).join('')}</tbody></table></div></article>`).join('') || `<p class="para muted">No entries match.</p>`) + (list.length > shown.length ? `<button class="btn ghost" data-a="more">Show more (${list.length - shown.length} left)</button>` : '');
+}
+function bJournal() {
+  return `<div class="jtools"><label class="search">${ic('search')}<input type="search" placeholder="Search the journal" value="${esc(UI.jq)}" data-in="jq" aria-label="Search the journal"></label><button class="btn sm" data-a="exportCsv">${ic('down')} Export CSV</button></div><p class="para muted">Every sale, purchase and payment is recorded here as a balanced entry: money in one account, out of another.</p><div id="jlist">${jlistHTML()}</div>`;
+}
+ACT.more = () => { UI.jl += 60; $('#jlist').innerHTML = jlistHTML(); };
+function bAccts() {
+  const m = netByAcct();
+  return Object.keys(TYPE_NAME).map(t => `<section class="card"><div class="card-h"><h2>${TYPE_NAME[t]}</h2></div><div class="tscroll"><table class="tbl"><tbody>${ACCTS.filter(a => a[2] === t).map(a => { const v = nat(a[0], m[a[0]] || 0); return `<tr class="click" data-a="ledger" data-id="${a[0]}" tabindex="0"><td class="code">${a[0]}</td><td>${esc(a[1])}</td><td class="r num">${money(v)}</td><td class="r">${ic('chev')}</td></tr>`; }).join('')}</tbody></table></div></section>`).join('');
+}
+ACT.ledger = el => {
+  const a = el.dataset.id; let run = 0;
+  const rows = []; S.entries.slice().sort((x, y) => x.date.localeCompare(y.date) || x.n - y.n).forEach(e => e.lines.forEach(l => { if (l.a === a) { run = r2(run + nat(a, l.dr - l.cr)); rows.push(`<tr><td>${fmtD(e.date)}</td><td>#${e.n} ${esc(e.memo)}</td><td class="r num">${l.dr ? money(l.dr) : ''}</td><td class="r num">${l.cr ? money(l.cr) : ''}</td><td class="r num">${money(run)}</td></tr>`); } }));
+  openSheet(`${a} ${acctName(a)}`, rows.length ? `<div class="tscroll"><table class="tbl mini"><thead><tr><th>Date</th><th>What</th><th class="r">Debit</th><th class="r">Credit</th><th class="r">Balance</th></tr></thead><tbody>${rows.reverse().join('')}</tbody></table></div>` : `<p class="para muted">No entries in this account yet.</p>`, { wide: true });
+};
+function bSales() {
+  const [f, t] = rangeOf(UI.period), p = pnl(f, t), st = productStats(f, t), units = st.rows.reduce((s, r) => s + r.units, 0), paySum = st.pay.cash + st.pay.mobile + st.pay.credit;
+  const lo = f > addDays(today(), -29) ? f : addDays(today(), -29), hi = t < today() ? t : today(), days = daily(lo, hi);
+  const waste = (p.exps.find(x => x.a === '5100') || { v: 0 }).v;
+  const mix = [['Cash', st.pay.cash], ['Mobile money', st.pay.mobile], ['On credit', st.pay.credit]];
+  return `${periodBar()}<div class="tiles"><div class="tile"><span class="tl">Income</span><b class="big">${money(p.revenue)}</b></div><div class="tile owner-only"><span class="tl">Gross profit</span><b class="big">${money(p.gross)}</b><span class="ts">${pct(p.revenue ? p.gross / p.revenue * 100 : 0)} margin</span></div><div class="tile"><span class="tl">Counter sales</span><b class="big">${st.tx}</b><span class="ts">${st.tx ? 'average ' + money(paySum / st.tx) : 'none yet'}</span></div><div class="tile owner-only"><span class="tl">Thrown away</span><b class="big">${money(waste)}</b><span class="ts">leftovers and spoilage</span></div></div>
+  <div class="grid2 top"><section class="card"><div class="card-h"><h2>Daily sales</h2><div class="legend"><i class="k bar"></i>Sales<i class="k gp owner-only"></i><span class="owner-only">Profit</span></div></div>${chart(days)}</section>
+  <section class="card"><div class="card-h"><h2>How customers paid</h2></div>${mix.map(([l, v]) => `<div class="mix"><span>${l}</span><div class="mixbar"><i style="width:${paySum ? Math.round(v / paySum * 100) : 0}%"></i></div><b class="num">${money(v, 0)}</b></div>`).join('')}</section></div>
+  <section class="card"><div class="card-h"><h2>By item</h2></div>${st.rows.length ? `<div class="tscroll"><table class="tbl"><thead><tr><th>Item</th><th class="r">Sold</th><th class="r">Sales</th><th class="r owner-only">Cost</th><th class="r owner-only">Profit</th><th class="r owner-only">Margin</th><th class="r owner-only">Wasted</th></tr></thead><tbody>${st.rows.map(r => { const pr = r2(r.sales - r.cost), m = marginOf(r.sales, r.cost); return `<tr><td><b>${esc(r.name)}</b></td><td class="r num">${fmtN(r.units, 1)}</td><td class="r num">${money(r.sales)}</td><td class="r num owner-only">${money(r.cost)}</td><td class="r num owner-only">${money(pr)}</td><td class="r owner-only">${chip(pct(m), m >= S.target ? 'good' : m > 0 ? 'warn' : 'bad')}</td><td class="r num owner-only">${r.waste ? money(r.waste) : '–'}</td></tr>`; }).join('')}</tbody></table></div><p class="para muted">${units ? fmtN(units, 0) + ' items sold over the counter in this period. Cake and catering orders are in the totals above.' : ''}</p>` : `<p class="para muted">No counter sales in this period.</p>`}</section>`;
+}
+
+/* ============ RECORD FORMS ============ */
+const FORMS = {};
+const dateFld = () => fld('Date', `<input name="date" type="date" value="${today()}" required>`);
+ACT.record = () => openSheet('Record', `<div class="menu">${[['exp', 'An expense', 'Gas, rent, wages, anything you paid for'], ['sup', 'Pay a supplier', 'Settle money you owe'], ['rcv', 'A customer paid me', 'Collect money owed to you'], ['oin', 'I put money in', 'Opening cash or a top-up'], ['oout', 'I took money out', 'Money you took for yourself'], ['jnl', 'Journal entry', 'Any balanced entry, for an accountant']].map(([k, t, d]) => `<button type="button" class="mrow" data-a="rec" data-v="${k}"><span><b>${t}</b><small>${d}</small></span>${ic('chev')}</button>`).join('')}</div>`);
+ACT.rec = el => FORMS[el.dataset.v](); ACT.recExpense = () => FORMS.exp();
+FORMS.exp = () => openSheet('Record an expense', `<form data-submit="exp" class="stack">${fld('What was it for?', `<select name="acct">${EXP_CHOICES.map(a => `<option value="${a}">${a === '1300' ? 'Equipment (kept as an asset)' : acctName(a)}</option>`).join('')}</select>`)}
+  <div class="two">${fld('Amount (K)', numIn('amount', '', 'required'))}${fld('Note', '<input name="desc" placeholder="Optional">')}</div>${fld('Paid with', radios('method', PAY3, 'cash'))}
+  <div data-when="method=credit">${fld('Supplier', '<input name="supplier" list="suppliers2" autocomplete="off">')}<datalist id="suppliers2">${partyBalances('2000').map(d => `<option value="${esc(d.party)}">`).join('')}</datalist></div>${dateFld()}
+  <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save expense</button></div></form>`);
+SUB.exp = fd => { const a = parseFloat(fd.get('amount')) || 0, m = fd.get('method'), sup = (fd.get('supplier') || '').trim(); if (a <= 0) return toast('Enter an amount', 'bad'); if (m === 'credit' && !sup) return toast('Enter the supplier name', 'bad'); spend({ acct: fd.get('acct'), amount: a, desc: (fd.get('desc') || '').trim() || acctName(fd.get('acct')), method: m, supplier: sup, date: fd.get('date') }); closeModal(); commit(); toast('Expense saved'); };
+const partyForm = (title, kind, list, sel, amt) => openSheet(title, list.length ? `<form data-submit="${kind}" class="stack">${fld(kind === 'sup' ? 'Supplier' : 'Customer', `<select name="party" data-chg="partyAmt">${list.map(x => `<option value="${esc(x.party)}" data-amt="${x.amt}" ${x.party === sel ? 'selected' : ''}>${esc(x.party)} (${money(x.amt)})</option>`).join('')}</select>`)}${fld('Amount (K)', numIn('amount', amt || list[0].amt, 'required'))}${fld(kind === 'sup' ? 'Paid with' : 'Received as', radios('method', PAY2, 'cash'))}${dateFld()}<div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save</button></div></form>` : `<p class="para">${kind === 'sup' ? 'You do not owe any supplier.' : 'No customer owes you money.'}</p>`);
+CHG.partyAmt = el => { el.form.amount.value = el.selectedOptions[0].dataset.amt; };
+FORMS.sup = (sel, amt) => partyForm('Pay a supplier', 'sup', partyBalances('2000'), sel, amt); FORMS.rcv = (sel, amt) => partyForm('Customer payment', 'rcv', partyBalances('1100'), sel, amt);
+SUB.sup = fd => { const a = parseFloat(fd.get('amount')) || 0; if (a <= 0) return toast('Enter an amount', 'bad'); paySupplier({ party: fd.get('party'), amount: a, method: fd.get('method'), date: fd.get('date') }); closeModal(); commit(); toast('Payment saved'); };
+SUB.rcv = fd => { const a = parseFloat(fd.get('amount')) || 0; if (a <= 0) return toast('Enter an amount', 'bad'); collectFrom({ party: fd.get('party'), amount: a, method: fd.get('method'), date: fd.get('date') }); closeModal(); commit(); toast('Payment saved'); };
+const ownerForm = (k) => openSheet(k === 'in' ? 'Money you put in' : 'Money you took out', `<form data-submit="owner" class="stack"><input type="hidden" name="kind" value="${k}">${fld('Amount (K)', numIn('amount', '', 'required'))}${fld(k === 'in' ? 'Put in as' : 'Taken from', radios('method', PAY2, 'cash'))}${fld('Note', `<input name="memo" placeholder="${k === 'in' ? 'Opening cash, top-up…' : 'For home, school fees…'}">`)}${dateFld()}<div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save</button></div></form>`);
+FORMS.oin = () => ownerForm('in'); FORMS.oout = () => ownerForm('out');
+SUB.owner = fd => { const a = parseFloat(fd.get('amount')) || 0; if (a <= 0) return toast('Enter an amount', 'bad'); ownerMoney({ kind: fd.get('kind'), amount: a, method: fd.get('method'), memo: (fd.get('memo') || '').trim(), date: fd.get('date') }); closeModal(); commit(); toast('Saved'); };
+const jrow = () => `<div class="jrow"><select name="ja" aria-label="Account"><option value="">Account</option>${ACCTS.map(a => `<option value="${a[0]}">${a[0]} ${esc(a[1])}</option>`).join('')}</select>${numIn('jd', '', 'placeholder="Debit" aria-label="Debit"')}${numIn('jc', '', 'placeholder="Credit" aria-label="Credit"')}<input name="jp" placeholder="Person (optional)" aria-label="Person"><button type="button" class="icon-btn" data-a="rowdel" aria-label="Remove line">${ic('x')}</button></div>`;
+FORMS.jnl = () => openSheet('Journal entry', `<form data-submit="jnl" data-live="jnl" class="stack"><p class="para muted">Debits must equal credits. Assets and expenses go up with a debit. Income, owner's share and what you owe go up with a credit.</p>${fld('What is it for?', '<input name="memo" required>')}${dateFld()}
+  <div class="rows" data-rows="j"><div class="rows-list">${jrow()}${jrow()}</div><button type="button" class="btn ghost sm" data-a="rowadd" data-t="j">${ic('plus')} Add line</button></div><div id="jnlPrev" class="change"></div>
+  <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Post entry</button></div></form>`, { wide: true });
+const jRead = f => $$('[name=ja]', f).map((s, k) => ({ a: s.value, dr: parseFloat($$('[name=jd]', f)[k].value) || 0, cr: parseFloat($$('[name=jc]', f)[k].value) || 0, party: $$('[name=jp]', f)[k].value.trim() })).filter(l => l.a && (l.dr || l.cr));
+LIVE.jnl = f => { const L = jRead(f), d = r2(L.reduce((s, l) => s + l.dr, 0)), c = r2(L.reduce((s, l) => s + l.cr, 0)); $('#jnlPrev', f).innerHTML = `Debits ${money(d)} · Credits ${money(c)} · ${Math.abs(d - c) < 0.005 && d > 0 ? '<b class="pos">Balanced</b>' : `<span class="neg">Difference ${money(Math.abs(d - c))}</span>`}`; };
+SUB.jnl = (fd, f) => { const L = jRead(f), d = r2(L.reduce((s, l) => s + l.dr, 0)), c = r2(L.reduce((s, l) => s + l.cr, 0)); if (L.length < 2 || Math.abs(d - c) > 0.004 || d <= 0) return toast('Debits and credits must match', 'bad'); post({ date: fd.get('date'), memo: fd.get('memo').trim(), type: 'manual', lines: L }); closeModal(); commit(); toast('Entry posted'); };
+const _ra = ACT.rowadd; ACT.rowadd = el => el.dataset.t === 'j' ? $('.rows-list', el.closest('[data-rows]')).insertAdjacentHTML('beforeend', jrow()) : _ra(el);
+ACT.rowdel = el => { const row = el.closest('.rrow,.lrow,.jrow'), f = el.closest('form'); row.remove(); if (f) runLive(f); };
+
+/* ============ CLOSE DAY ============ */
+ACT.closeDay = () => {
+  const exp = balOf('1000'), st = productStats(today(), today());
+  openSheet('Close the day', `<form data-submit="closeDay" data-live="close" class="stack"><div class="paytotal"><span>Cash the books say is in the drawer</span><b>${money(exp)}</b></div>
+  <p class="para muted">Today: ${st.tx} counter ${st.tx === 1 ? 'sale' : 'sales'} · cash ${money(st.pay.cash)} · mobile ${money(st.pay.mobile)} · on credit ${money(st.pay.credit)}</p>
+  ${fld('Cash you counted (K)', numIn('counted', exp, 'required'))}<div id="closePrev" class="change"></div>
+  <div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn primary" type="submit">Save count</button></div></form>`);
+};
+LIVE.close = f => { const d = r2((parseFloat(f.counted.value) || 0) - balOf('1000')); $('#closePrev', f).innerHTML = Math.abs(d) < 0.005 ? '<b class="pos">The cash matches.</b>' : d > 0 ? `Over by <b>${money(d)}</b>. It is recorded as cash over.` : `<span class="neg">Short by ${money(-d)}</span>. It is recorded as cash short.`; };
+SUB.closeDay = fd => { const d = countCash({ counted: parseFloat(fd.get('counted')) || 0, date: today() }); closeModal(); commit(); toast(Math.abs(d) < 0.005 ? 'Day closed. Cash matches.' : 'Day closed. Difference recorded.'); };
+
+/* ============ SETTINGS ============ */
+V.settings = function () {
+  return `${head('Settings')}<div class="grid2 top">
+  <section class="card"><div class="card-h"><h2>Your business</h2></div><form data-submit="biz" class="stack">${fld('Business name', `<input name="biz" required value="${esc(S.biz)}">`)}${fld('Profit target on each item (%)', numIn('target', S.target, 'required'), 'Used to suggest prices and flag items that earn too little.')}<button class="btn primary" type="submit">Save</button></form></section>
+  <section class="card"><div class="card-h"><h2>Owner PIN</h2></div><p class="para muted">${S.pin ? 'A PIN is set. Staff cannot open Books, costs or Settings until it is entered.' : 'Set a PIN so staff using the till cannot see your costs, profit or books.'}</p><form data-submit="pin" class="stack">${fld(S.pin ? 'New PIN' : 'Choose a PIN', '<input name="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="4 or more digits">')}<div class="foot start"><button class="btn primary" type="submit">${S.pin ? 'Change PIN' : 'Set PIN'}</button>${S.pin ? '<button type="button" class="btn ghost" data-a="removePin">Remove PIN</button>' : ''}</div></form><p class="para muted">The PIN keeps honest staff out of the numbers. Your data lives in this browser, so keep a backup.</p></section>
+  <section class="card"><div class="card-h"><h2>Backup</h2></div><p class="para muted">${storageOK ? 'Your books are saved in this browser on this phone.' : 'This browser is not saving.'} A backup file lets you move to a new phone or recover after clearing browser data.</p><div class="foot start wrap"><button class="btn primary" data-a="backup">${ic('down')} Download backup</button><button class="btn" data-a="restore">Restore from backup</button></div></section>
+  <section class="card"><div class="card-h"><h2>Start over</h2></div><p class="para muted">${S.demo ? 'You are using example data.' : 'This deletes your books from this browser. Download a backup first.'}</p><div class="foot start wrap"><button class="btn" data-a="startFresh">${S.demo ? 'Start my own books' : 'Clear sales and books'}</button>${S.demo ? '' : '<button class="btn danger" data-a="eraseAll">Erase everything</button>'}</div></section></div>`;
+};
+SUB.biz = fd => { S.biz = fd.get('biz').trim() || 'My Kaibar'; S.target = Math.min(95, Math.max(1, parseFloat(fd.get('target')) || 40)); commit(); toast('Saved'); };
+SUB.pin = fd => { const p = (fd.get('pin') || '').trim(); if (p.length < 4) return toast('Use at least 4 digits', 'bad'); S.pin = p; UI.unlocked = true; commit(); toast('PIN set'); };
+ACT.removePin = () => { S.pin = ''; UI.unlocked = false; commit(); toast('PIN removed'); };
+SUB.unlock = fd => { if (fd.get('pin') === S.pin) { UI.unlocked = true; render(); } else toast('Wrong PIN', 'bad'); };
+ACT.lock = () => { UI.unlocked = false; if (['books', 'settings'].includes(UI.view)) UI.view = 'today'; render(); };
+async function saveFile(name, text) {
+  try { const d = window.claude && await window.claude.use('downloads'); if (!d) throw { code: 'unavailable' }; await d.save({ filename: name, data: text }); toast('File ready'); }
+  catch (e) { if (e && e.code === 'declined') return; openSheet('Copy this text', `<p class="para">Saving files is not available here. Copy the text below and keep it somewhere safe, such as a note to yourself.</p><textarea class="mono" id="fbTxt" rows="10" readonly>${esc(text)}</textarea><div class="foot"><button type="button" class="btn" data-a="copyFb">Copy text</button></div>`); }
+}
+ACT.copyFb = () => { const t = $('#fbTxt'); t.select(); try { navigator.clipboard.writeText(t.value).then(() => toast('Copied'), () => toast('Press and hold to copy')); } catch (e) { toast('Press and hold to copy'); } };
+ACT.backup = () => saveFile(`kaibar-backup-${today()}.json`, JSON.stringify(S));
+ACT.exportCsv = () => {
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"', rows = [['No', 'Date', 'Memo', 'Account', 'Account name', 'Person', 'Debit', 'Credit', 'Reversed']];
+  S.entries.slice().sort((a, b) => a.n - b.n).forEach(e => e.lines.forEach(l => rows.push([e.n, e.date, e.memo, l.a, acctName(l.a), l.party, l.dr || '', l.cr || '', e.voided ? 'yes' : ''])));
+  saveFile(`kaibar-journal-${today()}.csv`, rows.map(r => r.map(q).join(',')).join('\n'));
+};
+ACT.restore = () => openSheet('Restore from backup', `<form data-submit="restore" class="stack"><p class="para warnt">This replaces everything in this browser with the backup.</p>${fld('Backup file', '<input type="file" name="file" accept=".json,application/json">')}${fld('Or paste the backup text', '<textarea name="text" rows="4" class="mono"></textarea>')}<div class="foot"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn danger" type="submit">Replace my books</button></div></form>`);
+SUB.restore = async (fd) => {
+  try {
+    const file = fd.get('file'); const text = file && file.size ? await file.text() : (fd.get('text') || '').trim(); const obj = JSON.parse(text);
+    if (!obj || !Array.isArray(obj.entries) || !Array.isArray(obj.ings) || !Array.isArray(obj.prods)) throw new Error('bad');
+    S = Object.assign(blank(), obj); S.demo = false; persist(); closeModal(); render(); toast('Backup restored');
+  } catch (e) { toast('That is not a valid backup', 'bad'); }
+};
+ACT.startFresh = () => openSheet('Start your own books', `<p class="para">Clear the example sales, purchases and orders. You can keep the example recipes and ingredients to edit, or start with a blank menu.</p><div class="foot wrap"><button type="button" class="btn ghost" data-a="close">Cancel</button><button type="button" class="btn" data-a="fresh" data-keep="1">Keep recipes, clear the rest</button><button type="button" class="btn primary" data-a="fresh" data-keep="0">Start completely blank</button></div>`);
+ACT.fresh = el => {
+  const keep = el.dataset.keep === '1', biz = S.biz, target = S.target, pin = S.pin, ings = S.ings, prods = S.prods;
+  S = blank(); S.biz = biz; S.target = target; S.pin = pin;
+  if (keep) { S.ings = ings.map(i => ({ ...i, qty: 0, value: 0 })); S.prods = prods.map(p => ({ ...p, pqty: 0, pvalue: 0 })); }
+  UI.cart = []; closeModal(); persist(); render(); toast(keep ? 'Fresh books. Record your first purchases.' : 'Fresh books. Add your first recipe.');
+};
+ACT.eraseAll = () => ask('Erase everything?', 'All sales, stock, recipes and orders in this browser will be deleted. This cannot be undone.', 'Erase everything', () => { const biz = S.biz; S = blank(); S.biz = biz; UI.cart = []; closeModal(); persist(); render(); }, true);
+
+/* ============ EVENTS ============ */
+const IN = {
+  search: el => { UI.q = el.value; $('#pgrid').innerHTML = gridHTML(); },
+  disc: el => { UI.disc = parseFloat(el.value) || 0; $$('.cart-total').forEach(x => { x.textContent = money(cartTotals().total); }); },
+  jq: el => { UI.jq = el.value; UI.jl = 60; $('#jlist').innerHTML = jlistHTML(); }
+};
+ACT.go = el => { UI.view = el.dataset.v; closeModal(); render(); window.scrollTo(0, 0); };
+ACT.sub = el => { UI.sub[el.dataset.k] = el.dataset.v; render(); };
+ACT.close = () => closeModal();
+ACT.confirmYes = () => { const f = CONFIRM; CONFIRM = null; if (f) f(); };
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if (el) { const f = ACT[el.dataset.a]; if (f) { try { f(el, e); } catch (err) { console.error(err); toast('Something went wrong: ' + err.message, 'bad'); } } return; }
+  if (e.target.id === 'modal') closeModal();
+});
+document.addEventListener('submit', e => {
+  const f = e.target.closest('form[data-submit]'); if (!f) return; e.preventDefault();
+  try { const r = SUB[f.dataset.submit](new FormData(f), f); if (r && r.catch) r.catch(err => { console.error(err); toast('Something went wrong: ' + err.message, 'bad'); }); } catch (err) { console.error(err); toast('Something went wrong: ' + err.message, 'bad'); }
+});
+document.addEventListener('input', e => { const t = e.target; if (t.dataset && t.dataset.in && IN[t.dataset.in]) IN[t.dataset.in](t); const f = t.closest && t.closest('form[data-live]'); if (f) runLive(f); });
+document.addEventListener('change', e => { const t = e.target; if (t.dataset && t.dataset.chg && CHG[t.dataset.chg]) CHG[t.dataset.chg](t); const f = t.closest && t.closest('form'); if (f) { applyWhen(f); runLive(f); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#modal').hidden) closeModal();
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('tr.click')) { e.preventDefault(); e.target.click(); }
+});
+
+/* ============ BOOT ============ */
+(function boot() {
+  S = load();
+  if (!S) { seedDemo(); persist(); } else { const b = blank(); for (const k in b) if (S[k] === undefined) S[k] = b[k]; }
+  render();
+})();
+/* ============ installed-app layer (offline, install button, real backup download) ============ */
+let deferredInstall = null, storageSafe = null;
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const refreshSettings = () => { if (UI.view === 'settings') render(); };
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; refreshSettings(); });
+window.addEventListener('appinstalled', () => { deferredInstall = null; refreshSettings(); toast('App installed'); });
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(r => { storageSafe = r; refreshSettings(); }).catch(() => { }); } catch (e) { }
+try { if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').then(refreshSettings).catch(() => { })); } catch (e) { }
+ACT.installApp = async () => { if (!deferredInstall) return; deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch (e) { } deferredInstall = null; render(); };
+const _settingsView = V.settings;
+V.settings = function () {
+  const offline = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
+  const state = isStandalone() ? chip('Running as an installed app', 'good') : deferredInstall ? chip('Ready to install', 'info') : chip('Not installed yet');
+  return _settingsView() + `<section class="card"><div class="card-h"><h2>This app on your phone</h2>${state}</div>
+  <p class="para muted">${offline ? 'Works without internet. The app is stored on this phone.' : 'The first time you open it with internet, it stores itself so it can open without signal. Open it once more after that.'}</p>
+  <p class="para muted">${storageSafe === true ? 'Your books are marked as protected storage, so the phone will not clear them to free space.' : storageSafe === false ? 'The phone has not marked your books as protected storage. Install the app and download a backup often.' : ''}</p>
+  ${deferredInstall ? `<div class="foot start"><button class="btn primary" data-a="installApp">Install app</button></div>` : isStandalone() ? '' : `<p class="para">To install: open the Chrome menu (three dots), then tap <b>Install app</b> or <b>Add to Home screen</b>.</p>`}</section>`;
+};
+const _oldSaveFile = saveFile;
+saveFile = async function (name, text) {
+  try {
+    const blob = new Blob([text], { type: name.endsWith('.csv') ? 'text/csv' : 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+    toast('Saved to your Downloads folder');
+  } catch (e) { _oldSaveFile(name, text); }
+};
+</script></body></html>
