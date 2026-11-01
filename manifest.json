@@ -4,7 +4,7 @@
   "description": "Sales, recipe costing, cake and catering orders, and books for a kaibar.",
   "id": "/kaibar-/",
   "start_url": "./index.html",
-  "scope": "./",
+  "scope": "/Kaibar-/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0A3438",
